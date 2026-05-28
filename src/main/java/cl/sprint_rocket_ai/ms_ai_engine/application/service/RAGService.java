@@ -4,6 +4,8 @@ import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAG
 import cl.sprint_rocket_ai.ms_ai_engine.domain.model.VectorDocument;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.LLMPortOut;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.VectorStorePortOut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RAGService {
+    private static final Logger log = LoggerFactory.getLogger(RAGService.class);
     private final LLMPortOut llmPortOut;
     private final VectorStorePortOut vectorStorePortOut;
 
@@ -21,10 +24,13 @@ public class RAGService {
     }
 
     public String ask(RAGRequest request) {
+        log.info("Inicio RAG query='{}'", request.query());
         List<VectorDocument> docs = vectorStorePortOut.search(request.query());
         String context = buildContext(docs);
         String prompt = buildPrompt(request, context);
-        return llmPortOut.generate(prompt);
+        String answer = llmPortOut.generate(prompt);
+        log.info("Fin RAG docs={} answerLength={}", docs.size(), answer == null ? 0 : answer.length());
+        return answer;
     }
 
     private String buildContext(List<VectorDocument> docs) {

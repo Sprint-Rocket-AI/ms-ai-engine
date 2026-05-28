@@ -1,0 +1,34 @@
+package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest;
+
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIIndexRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@Tag(name = "AI", description = "Endpoints de indexacion y RAG")
+public interface AIRest {
+
+    @Operation(summary = "Indexar documentos", description = "Indexa documentos en el vector store")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Indexacion aceptada"),
+            @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
+    })
+    ResponseEntity<Void> index(@Valid @RequestBody AIIndexRequest request);
+
+    @Operation(summary = "RAG", description = "Consulta al modelo usando contexto recuperado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Respuesta generada",
+                    content = @Content(schema = @Schema(implementation = RAGResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
+    })
+    ResponseEntity<RAGResponse> rag(@Valid @RequestBody RAGRequest request);
+}
+

@@ -20,9 +20,9 @@ public class AIIndexService {
     }
 
     public void index(AIIndexRequest request) {
-        log.info("Iniciando indexación");
+        log.info("Inicio indexacion id='{}' tipo='{}'", request.id(), request.tipo());
         vectorStorePortOut.save(request);
-        log.info("Fin de la indexación");
+        log.info("Fin indexacion id='{}'", request.id());
     }
 
 

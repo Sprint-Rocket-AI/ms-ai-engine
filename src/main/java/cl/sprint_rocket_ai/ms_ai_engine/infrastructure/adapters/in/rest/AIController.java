@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/ai")
-public class AIController {
+public class AIController implements AIRest {
     private final RAGService ragService;
     private final AIIndexService aiIndexService;
 
@@ -23,12 +23,14 @@ public class AIController {
         this.aiIndexService = aiIndexService;
     }
 
+    @Override
     @PostMapping("/index")
     public ResponseEntity<Void> index(@Valid @RequestBody AIIndexRequest request) {
         aiIndexService.index(request);
         return ResponseEntity.accepted().build();
     }
 
+    @Override
     @PostMapping("/rag")
     public ResponseEntity<RAGResponse> rag(@Valid @RequestBody RAGRequest request) {
         String answer = ragService.ask(request);
