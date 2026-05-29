@@ -6,6 +6,7 @@ import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AII
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
@@ -26,18 +27,23 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
     @Override
     public void save(AIIndexRequest request) {
         log.info("Indexando documento con Vector Store");
-        Map<String, Object> metadata = request.metadata();
-        metadata.put("tags",request.tags());
-        metadata.put("tipo",request.tipo());
-        metadata.put("source", request.source());
-
         Document document = Document.builder()
                             .id(request.id())
                             .text(request.contenido())
                             .metadata(request.metadata())
                             .build();
 
-        store.add(List.of(document));
+        TokenTextSplitter splitter = TokenTextSplitter.builder()
+                        .           withChunkSize(800)
+                                    .withMinChunkSizeChars(350)
+                                    .withMinChunkLengthToEmbed(5)
+                                    .withMaxNumChunks(10000)
+                                    .withKeepSeparator(true)
+                                    .build();
+
+        List<Document> chunks = splitter.apply(List.of(document));
+
+        store.add(chunks);
         log.info("Documento guardado en Vector Store");
     }
 

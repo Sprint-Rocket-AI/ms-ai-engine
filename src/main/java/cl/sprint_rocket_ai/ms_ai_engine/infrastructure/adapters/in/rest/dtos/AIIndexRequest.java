@@ -11,7 +11,6 @@ public record AIIndexRequest(
         @NotBlank String tipo,
         @NotBlank String contenido,
         List<String> tags,
-        @NotBlank String source,
         @NotNull Map<String, Object> metadata
 ) {
 }
