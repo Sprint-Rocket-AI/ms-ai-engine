@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "AI", description = "Endpoints de indexacion y RAG")
 public interface AIRest {
@@ -30,5 +32,12 @@ public interface AIRest {
             @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
     })
     ResponseEntity<RAGResponse> rag(@Valid @RequestBody RAGRequest request);
+
+    @Operation(summary = "Indexar PDF", description = "Indexa un archivo PDF en el vector store")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Indexacion aceptada"),
+            @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
+    })
+    ResponseEntity<Void> indexPdf(@RequestPart("file") MultipartFile file);
 }
 
