@@ -103,8 +103,9 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
     }
 
     private String getDefaultFilename(MultipartFile file) {
-        return file.getOriginalFilename() != null && !file.getOriginalFilename().isEmpty()
-                ? file.getOriginalFilename()
+        String originalFilename = file.getOriginalFilename();
+        return originalFilename != null && !originalFilename.isEmpty()
+                ? originalFilename
                 : "file.pdf";
     }
 
