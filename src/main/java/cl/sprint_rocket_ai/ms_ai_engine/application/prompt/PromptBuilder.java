@@ -1,10 +1,28 @@
 package cl.sprint_rocket_ai.ms_ai_engine.application.prompt;
 
-import cl.sprint_rocket_ai.ms_ai_engine.domain.model.VectorDocument;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGRequest;
-
-import java.util.List;
-
+/**
+ * Contrato del patrón Strategy para la construcción de prompts.
+ * Cada módulo (devmentor, checkpoint, roadmap) tiene su propia implementación.
+ */
 public interface PromptBuilder {
-    String build(RAGRequest request, List<VectorDocument> docs);
+
+    /**
+     * Construye el prompt completo listo para enviar al LLM.
+     *
+     * @param userInput  la pregunta/input del usuario
+     * @param context    el contexto recuperado del vector store (docs concatenados)
+     * @return prompt completo como String
+     */
+    String build(String userInput, String context);
+
+    /**
+     * Identifica el tipo de módulo al que corresponde esta estrategia.
+     * Usado por {@code PromptFactory} para registrar el builder.
+     */
+    PromptType getType();
+
+    /**
+     * Retorna el system prompt propio del módulo.
+     */
+    String buildSystemPrompt();
 }
