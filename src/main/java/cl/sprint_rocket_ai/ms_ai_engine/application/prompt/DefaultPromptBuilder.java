@@ -1,30 +1,32 @@
 package cl.sprint_rocket_ai.ms_ai_engine.application.prompt;
 
-import cl.sprint_rocket_ai.ms_ai_engine.domain.model.VectorDocument;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGRequest;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
-public class DefaultPromptBuilder implements PromptBuilder{
-    @Override
-    public String build(RAGRequest request, List<VectorDocument> docs) {
-        String context = docs.stream()
-                .map(VectorDocument::content)
-                .limit(5)
-                .collect(Collectors.joining("\n---\n"));
+public class DefaultPromptBuilder {
 
-        return """
-            Eres un asistente. Usa el contexto para responder en español.
+    private static final String TEMPLATE_WITH_CONTEXT = """
+        <context>
+        %s
+        </context>
+        
+        <question>
+        %s
+        </question>
+        """;
 
-            Contexto:
-            %s
+    private static final String TEMPLATE_WITHOUT_CONTEXT = """
+        <question>
+        %s
+        </question>
+        """;
 
-            Pregunta:
-            %s
 
-            """.formatted(context, request.query());
+    public String buildWithContext(String userPrompt, String context) {
+        return TEMPLATE_WITH_CONTEXT.formatted(context, userPrompt);
+    }
+
+    public String build(String userPrompt) {
+        return TEMPLATE_WITHOUT_CONTEXT.formatted(userPrompt);
     }
 }

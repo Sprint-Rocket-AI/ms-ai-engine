@@ -1,8 +1,8 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest;
 
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIIndexRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGResponse;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.rag.RAGRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.rag.RAGResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
