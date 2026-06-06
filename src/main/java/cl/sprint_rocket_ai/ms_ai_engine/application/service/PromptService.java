@@ -4,10 +4,14 @@ import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.LLMPortOut;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.builders.MapperPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.utils.SystemPromptLoaderUtils;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.PromptMapperRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+
+import java.util.Map;
 
 import static cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.SystemPromptTypeEnum.MAPPER;
 
@@ -18,23 +22,34 @@ public class PromptService {
     private final SystemPromptLoaderUtils loaderUtils;
     private final MapperPromptBuilder promptBuilder;
     private final LLMPortOut llmPortOut;
+    private final ObjectMapper mapper;
 
     public PromptService(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, LLMPortOut llmPortOut) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
         this.llmPortOut = llmPortOut;
+        this.mapper = new ObjectMapper();
     }
 
-    public String mapper (PromptMapperRequest request){
+    public Map<String, Object> map (PromptMapperRequest request){
         log.info("Iniciando Prompt Mapper");
         String userPrompt = request.content();
         log.info("Iniciando prompt: {}",userPrompt);
         String prompt = promptBuilder.build(userPrompt,request.template());
         log.info("Prompt creado, cargando systemPrompt");
         String systemPrompt = loaderUtils.load(MAPPER.getPath());
-        String answer = llmPortOut.generate(systemPrompt,prompt);
+        log.info("SystemPrompt cargado correctamente");
+        String jsonString = llmPortOut.generate(systemPrompt,prompt);
         log.info("Fin de Prompt Mapper");
-        return answer;
+        return toMapClass(jsonString);
+    }
+
+    private Map<String, Object> toMapClass(String jsonString){
+        try {
+            return mapper.readValue(jsonString, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

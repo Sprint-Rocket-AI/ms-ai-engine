@@ -12,6 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 @Tag(name = "Prompt", description = "Endpoints de Prompts customizados")
 public interface PromptController {
     @Operation(summary = "Mapper", description = "Desde el contenido envíado formatea a un Json")
@@ -20,5 +22,5 @@ public interface PromptController {
                     content = @Content(schema = @Schema(implementation = AIResponse.class))),
             @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
     })
-    ResponseEntity<AIResponse> mapper(@Valid @RequestBody PromptMapperRequest request);
+    ResponseEntity<Map<String,Object>> mapper(@Valid @RequestBody PromptMapperRequest request);
 }

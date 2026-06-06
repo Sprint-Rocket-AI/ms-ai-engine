@@ -6,13 +6,13 @@ import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIR
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.PromptMapperRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/prompt")
+@CrossOrigin(origins = "*")
 public class PromptRestController implements PromptController {
     private final PromptService promptService;
 
@@ -22,9 +22,9 @@ public class PromptRestController implements PromptController {
 
     @Override
     @PostMapping("/mapper")
-    public ResponseEntity<AIResponse> mapper(@Valid @RequestBody PromptMapperRequest request) {
-        String answer = promptService.mapper(request);
-        return ResponseEntity.ok(new AIResponse(answer));
+    public ResponseEntity<Map<String,Object>> mapper(@Valid @RequestBody PromptMapperRequest request) {
+        Map<String,Object> response = promptService.map(request);
+        return ResponseEntity.ok(response);
     }
 
 }
