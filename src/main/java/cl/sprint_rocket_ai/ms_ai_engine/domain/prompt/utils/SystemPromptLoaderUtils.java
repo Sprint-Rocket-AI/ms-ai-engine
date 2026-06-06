@@ -1,4 +1,4 @@
-package cl.sprint_rocket_ai.ms_ai_engine.application.prompt.utils;
+package cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.utils;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;

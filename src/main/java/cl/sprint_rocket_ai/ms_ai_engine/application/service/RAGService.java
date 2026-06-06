@@ -1,8 +1,8 @@
 package cl.sprint_rocket_ai.ms_ai_engine.application.service;
 
-import cl.sprint_rocket_ai.ms_ai_engine.application.prompt.DefaultPromptBuilder;
-import cl.sprint_rocket_ai.ms_ai_engine.application.prompt.utils.SystemPromptLoaderUtils;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.rag.RAGRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.builders.DefaultPromptBuilder;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.utils.SystemPromptLoaderUtils;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.model.VectorDocument;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.LLMPortOut;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.VectorStorePortOut;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.application.prompt.SystemPromptTypeEnum.RAG;
+import static cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.SystemPromptTypeEnum.RAG;
 
 @Service
 public class RAGService {
@@ -30,17 +30,17 @@ public class RAGService {
         this.loaderUtils = loaderUtils;
     }
 
-    public String ask(RAGRequest request) {
-        String query = request.query();
-        log.info("Inicio RAG query='{}'", query);
-        List<VectorDocument> docs = vectorStorePortOut.search(request.query());
+    public String ask(AIRequest request) {
+        String userPrompt = request.userPrompt();
+        log.info("Inicio RAG userPrompt='{}'", userPrompt);
+        List<VectorDocument> docs = vectorStorePortOut.search(request.userPrompt());
         log.info("Generando el contexto");
         String context = this.getContext(docs);
-        log.info("Contexto generado, creando userPrompt");
-        String userPrompt = promptBuilder.buildWithContext( query, context);
-        log.info("Prompt creado, cargando system userPrompt");
+        log.info("Contexto generado, creando Prompt");
+        String prompt = promptBuilder.buildWithContext( userPrompt, context);
+        log.info("Prompt creado, cargando systemPrompt");
         String systemPrompt = loaderUtils.load(RAG.getPath());
-        String answer = llmPortOut.generate(systemPrompt,userPrompt);
+        String answer = llmPortOut.generate(systemPrompt,prompt);
         log.info("Fin RAG docs={}", docs.size());
         return answer;
     }

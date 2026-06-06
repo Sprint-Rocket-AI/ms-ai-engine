@@ -1,4 +1,4 @@
-package cl.sprint_rocket_ai.ms_ai_engine.application.prompt;
+package cl.sprint_rocket_ai.ms_ai_engine.domain.prompt.builders;
 
 import org.springframework.stereotype.Component;
 
