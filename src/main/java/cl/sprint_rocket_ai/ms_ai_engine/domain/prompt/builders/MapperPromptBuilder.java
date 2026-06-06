@@ -12,9 +12,9 @@ public class MapperPromptBuilder{
             %s
             </structure>
             
-            <question>
+            <content>
             %s
-            </question>
+            </content>
             """;
 
     public String build(String userPrompt, Map<String, Object> template) {
