@@ -17,9 +17,11 @@ public class GeminisLLM {
     }
 
     public String generate(String systemPrompt, String userPrompt) {
-        ChatClient.ChatClientRequestSpec prompt = chatClient.prompt().user(userPrompt);
-        prompt.system(systemPrompt);
-        return prompt.call().content();
+        return chatClient.prompt()
+                .system(systemPrompt)
+                .user(userPrompt)
+                .call()
+                .content();
     }
 
     public List<float[]> embedding(List<String> texts) {

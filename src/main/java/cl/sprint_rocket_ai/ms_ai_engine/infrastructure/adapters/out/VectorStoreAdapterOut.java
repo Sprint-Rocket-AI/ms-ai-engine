@@ -56,7 +56,7 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
         List<Document> documents = store.similaritySearch(searchRequest);
         log.info("Búsqueda finalizada");
         return documents.stream()
-                .map(this::toVectorDocument)
+                .map(doc -> toVectorDocument(doc))
                 .toList();
 
     }
