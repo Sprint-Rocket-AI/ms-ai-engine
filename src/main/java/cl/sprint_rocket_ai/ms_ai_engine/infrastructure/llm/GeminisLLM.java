@@ -1,7 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.llm;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Component;
 
@@ -12,13 +11,15 @@ public class GeminisLLM {
     private final ChatClient chatClient;
     private final EmbeddingModel embeddingModel;
 
-    public GeminisLLM(ChatModel chatModel, EmbeddingModel embeddingModel) {
-        this.chatClient = ChatClient.create(chatModel);
+    public GeminisLLM(ChatClient.Builder chatClientBuilder, EmbeddingModel embeddingModel) {
+        this.chatClient = chatClientBuilder.build();
         this.embeddingModel = embeddingModel;
     }
 
-    public String generate(String prompt) {
-        return chatClient.prompt(prompt).call().content();
+    public String generate(String systemPrompt, String userPrompt) {
+        ChatClient.ChatClientRequestSpec prompt = chatClient.prompt().user(userPrompt);
+        prompt.system(systemPrompt);
+        return prompt.call().content();
     }
 
     public List<float[]> embedding(List<String> texts) {

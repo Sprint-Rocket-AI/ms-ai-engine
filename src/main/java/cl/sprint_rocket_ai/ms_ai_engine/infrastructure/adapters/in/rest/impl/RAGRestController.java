@@ -1,11 +1,12 @@
-package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest;
+package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.impl;
 
 import cl.sprint_rocket_ai.ms_ai_engine.application.service.AIIndexService;
 import cl.sprint_rocket_ai.ms_ai_engine.application.service.PdfIndexService;
 import cl.sprint_rocket_ai.ms_ai_engine.application.service.RAGService;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.RAGController;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIIndexRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.RAGResponse;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api")
-public class AIController implements AIRest {
+@RequestMapping("/rag")
+public class RAGRestController implements RAGController {
     private final RAGService ragService;
     private final AIIndexService aiIndexService;
     private final PdfIndexService pdfIndexService;
 
-    public AIController(RAGService ragService, AIIndexService aiIndexService, PdfIndexService pdfIndexService) {
+    public RAGRestController(RAGService ragService, AIIndexService aiIndexService, PdfIndexService pdfIndexService) {
         this.ragService = ragService;
         this.aiIndexService = aiIndexService;
         this.pdfIndexService = pdfIndexService;
@@ -37,10 +38,10 @@ public class AIController implements AIRest {
     }
 
     @Override
-    @PostMapping("/rag")
-    public ResponseEntity<RAGResponse> rag(@Valid @RequestBody RAGRequest request) {
+    @PostMapping("/query")
+    public ResponseEntity<AIResponse> rag(@Valid @RequestBody AIRequest request) {
         String answer = ragService.ask(request);
-        return ResponseEntity.ok(new RAGResponse(answer));
+        return ResponseEntity.ok(new AIResponse(answer));
     }
 
     @Override
