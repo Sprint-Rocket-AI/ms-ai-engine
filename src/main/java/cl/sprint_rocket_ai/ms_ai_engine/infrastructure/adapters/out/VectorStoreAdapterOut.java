@@ -1,6 +1,5 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.out;
 
-import cl.sprint_rocket_ai.ms_ai_engine.domain.model.VectorDocument;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.port.out.VectorStorePortOut;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.adapters.in.rest.dtos.AIIndexRequest;
 import org.slf4j.Logger;
@@ -46,7 +45,7 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
     }
 
     @Override
-    public List<VectorDocument> search(String query) {
+    public List<Document> search(String query) {
         log.info("Realizando busqueda en Vector Store");
         SearchRequest searchRequest = SearchRequest.builder()
                 .query(query)
@@ -55,9 +54,7 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
 
         List<Document> documents = store.similaritySearch(searchRequest);
         log.info("Búsqueda finalizada");
-        return documents.stream()
-                .map(this::toVectorDocument)
-                .toList();
+        return documents;
 
     }
 
@@ -82,15 +79,6 @@ public class VectorStoreAdapterOut implements VectorStorePortOut {
         log.info("Documento PDF guardado en Vector Store");
     }
 
-    // #### HELPERS
-
-    private VectorDocument toVectorDocument(Document doc) {
-        return new VectorDocument(
-                doc.getId(),
-                doc.getText(),
-                doc.getMetadata()
-        );
-    }
 
     private TokenTextSplitter getSplitter(){
         return TokenTextSplitter.builder()

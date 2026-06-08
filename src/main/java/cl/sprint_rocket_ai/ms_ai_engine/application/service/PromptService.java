@@ -32,14 +32,15 @@ public class PromptService {
     }
 
     public Map<String, Object> map (PromptMapperRequest request){
-        log.info("Iniciando Prompt Mapper");
+        String sessionId = request.sessionId();
+        log.info("Iniciando Prompt Mapper sessionId: {}",sessionId);
         String userPrompt = request.content();
         log.info("Iniciando prompt: {}",userPrompt);
         String prompt = promptBuilder.build(userPrompt,request.template());
         log.info("Prompt creado, cargando systemPrompt");
         String systemPrompt = loaderUtils.load(MAPPER.getPath());
         log.info("SystemPrompt cargado correctamente");
-        String jsonString = llmPortOut.generate(systemPrompt,prompt);
+        String jsonString = llmPortOut.generate(sessionId,systemPrompt,prompt);
         log.info("Fin de Prompt Mapper");
         return toMapClass(jsonString);
     }
