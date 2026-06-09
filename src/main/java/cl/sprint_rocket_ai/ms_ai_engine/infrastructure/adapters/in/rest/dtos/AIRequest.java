@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 
 
 public record AIRequest(
+        @NotBlank String sessionId,
         @NotBlank String userPrompt
 ) {
 }

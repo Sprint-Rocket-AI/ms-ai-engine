@@ -17,8 +17,8 @@ public class LLMAdapterOut implements LLMPortOut {
     }
 
     @Override
-    public String generate(String systemPrompt, String userPrompt) {
+    public String generate(String sessionId,String systemPrompt, String userPrompt) {
         log.info("Generando respuesta desde Geminis");
-        return geminisLLM.generate(systemPrompt,userPrompt);
+        return geminisLLM.generate(sessionId,systemPrompt,userPrompt);
     }
 }
