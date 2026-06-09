@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.config.chat_memory;
 
-import cl.sprint_rocket_ai.ms_ai_engine.repositories.ChatMessageMongoRepository;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.repositories.ChatMessageMongoRepository;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

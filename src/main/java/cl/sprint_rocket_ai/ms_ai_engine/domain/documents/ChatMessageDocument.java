@@ -1,4 +1,4 @@
-package cl.sprint_rocket_ai.ms_ai_engine.documents;
+package cl.sprint_rocket_ai.ms_ai_engine.domain.documents;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

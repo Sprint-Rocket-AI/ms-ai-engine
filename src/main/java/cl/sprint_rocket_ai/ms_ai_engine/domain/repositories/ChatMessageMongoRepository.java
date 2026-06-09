@@ -1,6 +1,6 @@
-package cl.sprint_rocket_ai.ms_ai_engine.repositories;
+package cl.sprint_rocket_ai.ms_ai_engine.domain.repositories;
 
-import cl.sprint_rocket_ai.ms_ai_engine.documents.ChatMessageDocument;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.ChatMessageDocument;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
