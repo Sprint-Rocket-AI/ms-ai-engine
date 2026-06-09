@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: ms-ai-engine
+  ai:
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY}
+      chat:
+        options:
+          model: claude-sonnet-4-5
+          temperature: 0.7
+          max-tokens: 5000
+
+    google:
+      genai:
+        embedding:
+          api-key: ${API_KEY}
+          project-id: ${PROJECT_ID}
+          text:
+            options:
+              model: gemini-embedding-001
+              dimensions: 768
+        chat:
+          enabled: false
+
+    mcp:
+      client:
+        enabled: true
+        toolcallback:
+          enabled: true
+        streamable-http:
+          connections:
+            github-mcp:
+              url: https://api.githubcopilot.com/mcp/
+              headers:
+                Authorization: Bearer ${GITHUB_MCP_TOKEN}
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ai_engine
+    username: ai_engine
+    password: ai_engine
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: mydatabase
+      username: myuser
+      password: mypassword
+
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000
+
+
+server:
+  port: 8081
+  servlet:
+    context-path: /ai-engine
+
+semantic:
+  cache:
+    similarity-threshold: 0.95
+    ttl-seconds: 3600

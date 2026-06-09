@@ -2,6 +2,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.service;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.MapperPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.ChatSpringAI;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.PromptMapperRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,13 +21,13 @@ public class PromptService {
 
     private final SystemPromptLoaderUtils loaderUtils;
     private final MapperPromptBuilder promptBuilder;
-    private final LLMPortOut llmPortOut;
+    private final ChatSpringAI chatSpringAI;
     private final ObjectMapper mapper;
 
-    public PromptService(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, LLMPortOut llmPortOut) {
+    public PromptService(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, ChatSpringAI chatSpringAI) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
-        this.llmPortOut = llmPortOut;
+        this.chatSpringAI = chatSpringAI;
         this.mapper = new ObjectMapper();
     }
 
@@ -39,7 +40,7 @@ public class PromptService {
         log.info("Prompt creado, cargando systemPrompt");
         String systemPrompt = loaderUtils.load(MAPPER.getPath());
         log.info("SystemPrompt cargado correctamente");
-        String jsonString = llmPortOut.generate(sessionId,systemPrompt,prompt);
+        String jsonString = chatSpringAI.generate(sessionId,systemPrompt,prompt);
         log.info("Fin de Prompt Mapper");
         return toMapClass(jsonString);
     }

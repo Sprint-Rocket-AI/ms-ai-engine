@@ -2,6 +2,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.service;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.CheckpointPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.ChatSpringAI;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.ResumenDiarioRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.ResumenDiarioResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.SugerenciaItem;
@@ -26,17 +27,17 @@ public class CheckpointService {
 
     private final SystemPromptLoaderUtils loaderUtils;
     private final CheckpointPromptBuilder promptBuilder;
-    private final LLMPortOut llmPortOut;
+    private final ChatSpringAI chatSpringAI;
     private final ObjectMapper objectMapper;
 
     public CheckpointService(SystemPromptLoaderUtils loaderUtils,
                              CheckpointPromptBuilder promptBuilder,
-                             LLMPortOut llmPortOut,
+                             ChatSpringAI chatSpringAI,
                              ObjectMapper objectMapper) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
-        this.llmPortOut = llmPortOut;
-        this.objectMapper = objectMapper;
+        this.chatSpringAI = chatSpringAI;
+        this.objectMapper = new ObjectMapper();
     }
 
     public SugerirActividadesResponse suggest(SugerirActividadesRequest request) {
@@ -48,7 +49,7 @@ public class CheckpointService {
             String systemPrompt = loaderUtils.load(CHECKPOINT_SUGGEST.getPath());
             log.info("SystemPrompt cargado correctamente");
 
-            String llmResponse = llmPortOut.generate("",systemPrompt, prompt);
+            String llmResponse = chatSpringAI.generate("",systemPrompt, prompt);
 
             SugerirActividadesResponse response = parseSuggestionResponse(llmResponse, request.userId());
             log.info("Sugerencias generadas exitosamente | userId='{}' total={}",
@@ -69,7 +70,7 @@ public class CheckpointService {
             String systemPrompt = loaderUtils.load(CHECKPOINT_DAILY_SUMMARY.getPath());
             log.info("SystemPrompt cargado correctamente");
 
-            String llmResponse = llmPortOut.generate("",systemPrompt, prompt);
+            String llmResponse = chatSpringAI.generate("",systemPrompt, prompt);
 
             ResumenDiarioResponse response = parseDailySummaryResponse(llmResponse, request.userId());
             log.info("Resumen diario generado exitosamente | userId='{}' sugerencias={}",
