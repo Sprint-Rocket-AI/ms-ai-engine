@@ -1,4 +1,4 @@
-package cl.sprint_rocket_ai.ms_ai_engine.service;
+package cl.sprint_rocket_ai.ms_ai_engine.ai.agents;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.MapperPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
@@ -16,15 +16,15 @@ import java.util.Map;
 import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.MAPPER;
 
 @Service
-public class PromptService {
-    private static final Logger log = LoggerFactory.getLogger(PromptService.class);
+public class MapperAgent {
+    private static final Logger log = LoggerFactory.getLogger(MapperAgent.class);
 
     private final SystemPromptLoaderUtils loaderUtils;
     private final MapperPromptBuilder promptBuilder;
     private final ChatSpringAI chatSpringAI;
     private final ObjectMapper mapper;
 
-    public PromptService(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, ChatSpringAI chatSpringAI) {
+    public MapperAgent(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, ChatSpringAI chatSpringAI) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
         this.chatSpringAI = chatSpringAI;

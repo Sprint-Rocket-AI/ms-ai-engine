@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.rest.impl;
 
-import cl.sprint_rocket_ai.ms_ai_engine.service.PromptService;
+import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.MapperAgent;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.PromptController;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.PromptMapperRequest;
 import jakarta.validation.Valid;
@@ -13,16 +13,16 @@ import java.util.Map;
 @RequestMapping("/prompt")
 @CrossOrigin(origins = "*")
 public class PromptRestController implements PromptController {
-    private final PromptService promptService;
+    private final MapperAgent mapperAgent;
 
-    public PromptRestController(PromptService promptService) {
-        this.promptService = promptService;
+    public PromptRestController(MapperAgent mapperAgent) {
+        this.mapperAgent = mapperAgent;
     }
 
     @Override
     @PostMapping("/mapper")
     public ResponseEntity<Map<String,Object>> mapper(@Valid @RequestBody PromptMapperRequest request) {
-        Map<String,Object> response = promptService.map(request);
+        Map<String,Object> response = mapperAgent.map(request);
         return ResponseEntity.ok(response);
     }
 
