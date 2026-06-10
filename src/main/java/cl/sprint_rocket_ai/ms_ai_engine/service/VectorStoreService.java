@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class VectorStoreService {
@@ -28,10 +29,13 @@ public class VectorStoreService {
 
     public void save(AIIndexRequest request) {
         log.info("Indexando Documento Mongo con Vector Store");
+        Map<String,Object> metadata = request.metadata();
+        metadata.put("tags",request.tags());
+        metadata.put("tipo",request.tipo());
         Document document = Document.builder()
                             .id(request.id())
                             .text(request.contenido())
-                            .metadata(request.metadata())
+                            .metadata(metadata)
                             .build();
 
         TokenTextSplitter splitter = this.getSplitter();
