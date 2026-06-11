@@ -32,8 +32,7 @@ public class CheckpointService {
 
     public CheckpointService(SystemPromptLoaderUtils loaderUtils,
                              CheckpointPromptBuilder promptBuilder,
-                             ChatSpringAI chatSpringAI,
-                             ObjectMapper objectMapper) {
+                             ChatSpringAI chatSpringAI) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
         this.chatSpringAI = chatSpringAI;

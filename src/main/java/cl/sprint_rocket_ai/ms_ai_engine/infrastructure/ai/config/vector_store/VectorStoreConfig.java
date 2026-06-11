@@ -29,6 +29,7 @@ public class VectorStoreConfig {
                 .distanceType(PgVectorStore.PgDistanceType.COSINE_DISTANCE)
                 .indexType(PgVectorStore.PgIndexType.HNSW)
                 .initializeSchema(true)
+                .maxDocumentBatchSize(10000)
                 .build();
     }
 
