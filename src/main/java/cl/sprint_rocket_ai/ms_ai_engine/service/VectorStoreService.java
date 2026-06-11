@@ -54,7 +54,7 @@ public class VectorStoreService {
                 .build();
 
         List<Document> documents = store.similaritySearch(searchRequest);
-        log.info("Búsqueda finalizada");
+        log.info("Búsqueda finalizada en Vector Store, cantidad de documentos: {}",documents.size());
         return documents;
 
     }

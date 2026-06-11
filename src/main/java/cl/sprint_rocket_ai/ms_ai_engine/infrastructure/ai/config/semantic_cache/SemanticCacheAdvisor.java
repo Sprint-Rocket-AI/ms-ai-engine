@@ -23,11 +23,12 @@ public class SemanticCacheAdvisor {
     @Value("${semantic.cache.similarity-threshold}")
     private double similarityThreshold;
 
-    public SemanticCacheAdvisor(@Qualifier("redisVectorStore") VectorStore cacheStore) {
+    public SemanticCacheAdvisor(@Qualifier("redisCacheVectorStore") VectorStore cacheStore) {
         this.cacheStore = cacheStore;
     }
 
     public Optional<String> findInCache(String question) {
+        log.info("Buscando existencia en caché");
         List<Document> hits = cacheStore.similaritySearch(
                 SearchRequest.builder()
                         .query(question)
@@ -35,16 +36,19 @@ public class SemanticCacheAdvisor {
                         .similarityThreshold(similarityThreshold)
                         .build()
         );
-        return hits.stream().findFirst().map(Document::getText);
+        log.info("Fin de búsqueda, registro en caché: {}",hits.size());
+        return hits.stream()
+                .findFirst()
+                .map(doc -> (String) doc.getMetadata().get("answer"));
     }
 
     public void saveToCache(String question, String answer) {
-        cacheStore.add(List.of(
-                Document.builder()
-                        .text(answer)
-                        .metadata(Map.of("question", question))
-                        .build()
-        ));
-        log.debug("Cache Guardado para la pregunta: {}", question);
+        log.info("Iniciando guardado en semantic caché");
+        Document documentToSave = Document.builder()
+                .text(question)
+                .metadata(Map.of("answer", answer))
+                .build();
+        cacheStore.add(List.of(documentToSave));
+        log.info("Caché Guardado para la pregunta: {}", question);
     }
 }

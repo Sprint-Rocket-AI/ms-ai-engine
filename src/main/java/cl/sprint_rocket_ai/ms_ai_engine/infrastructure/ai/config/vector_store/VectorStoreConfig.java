@@ -20,6 +20,12 @@ public class VectorStoreConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
+    @Value("${semantic.cache.index:cache-index}")
+    private String cacheIndex;
+
+    @Value("${semantic.cache.prefix:cache:}")
+    private String cachePrefix;
+
     @Bean(name = "pgVectorStore")
     @Primary
     public VectorStore pgVectorStore(JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel) {
@@ -33,13 +39,16 @@ public class VectorStoreConfig {
                 .build();
     }
 
-    @Bean(name = "redisVectorStore")
-    public VectorStore redisVectorStore(EmbeddingModel embeddingModel) {
+    @Bean(name = "redisCacheVectorStore")
+    public VectorStore redisCacheVectorStore(EmbeddingModel embeddingModel) {
         JedisPooled jedis = new JedisPooled(redisHost, redisPort);
 
         return RedisVectorStore.builder(jedis, embeddingModel)
-                .indexName("my-index")
-                .prefix("doc:")
+                .indexName(cacheIndex)
+                .prefix(cachePrefix)
+                //Tag = Similarity 0.95, solo recuperas el answer
+                //Text = Filtrar o buscas dentro del answer
+                .metadataFields(RedisVectorStore.MetadataField.tag("answer"))
                 .initializeSchema(true)
                 .build();
     }

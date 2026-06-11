@@ -74,3 +74,5 @@ semantic:
   cache:
     similarity-threshold: 0.95
     ttl-seconds: 3600
+    index: "cache-index"
+    prefix: "cache:"

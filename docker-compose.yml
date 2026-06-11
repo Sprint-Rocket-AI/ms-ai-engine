@@ -20,7 +20,7 @@ services:
 
   # utilizado por ms-ai-engine para almacenar embeddings en cache (semantic-cache)
   redis-vector:
-    image: redis/redis-stack-server:latest
+    image: redis/redis-stack:latest
     container_name: springrocket-redis-vector
     restart: unless-stopped
     ports:
