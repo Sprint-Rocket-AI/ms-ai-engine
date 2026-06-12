@@ -1,6 +1,8 @@
-package cl.sprint_rocket_ai.ms_ai_engine.rest;
+package cl.sprint_rocket_ai.ms_ai_engine.rest.impl;
 
-import cl.sprint_rocket_ai.ms_ai_engine.service.CheckpointService;
+import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.DailySummaryAgent;
+import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.SuggestActivitiesAgent;
+import cl.sprint_rocket_ai.ms_ai_engine.rest.CheckpointRest;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.ResumenDiarioRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.ResumenDiarioResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.SugerirActividadesRequest;
@@ -16,23 +18,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/checkpoint")
 public class CheckpointController implements CheckpointRest {
 
-    private final CheckpointService checkpointService;
+    private final SuggestActivitiesAgent suggestActivitiesAgent;
+    private final DailySummaryAgent dailySummaryAgent;
 
-    public CheckpointController(CheckpointService checkpointService) {
-        this.checkpointService = checkpointService;
+    public CheckpointController(SuggestActivitiesAgent suggestActivitiesAgent,
+                                DailySummaryAgent dailySummaryAgent) {
+        this.suggestActivitiesAgent = suggestActivitiesAgent;
+        this.dailySummaryAgent = dailySummaryAgent;
     }
 
     @Override
     @PostMapping("/sugerir-actividades")
     public ResponseEntity<SugerirActividadesResponse> sugerirActividades(
             @Valid @RequestBody SugerirActividadesRequest request) {
-        return ResponseEntity.ok(checkpointService.suggest(request));
+        return ResponseEntity.ok(suggestActivitiesAgent.suggest(request));
     }
 
     @Override
     @PostMapping("/resumen-diario")
     public ResponseEntity<ResumenDiarioResponse> resumenDiario(
             @Valid @RequestBody ResumenDiarioRequest request) {
-        return ResponseEntity.ok(checkpointService.dailySummary(request));
+        return ResponseEntity.ok(dailySummaryAgent.dailySummary(request));
     }
 }
