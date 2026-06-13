@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +34,20 @@ public class RAGRestController implements RAGController {
     @PostMapping("/index")
     public ResponseEntity<Void> index(@Valid @RequestBody AIIndexRequest request) {
         vectorStoreService.save(request);
+        return ResponseEntity.accepted().build();
+    }
+
+    @Override
+    @DeleteMapping("/index/{id}")
+    public ResponseEntity<Void> deleteIndex(@PathVariable("id") String id) {
+        vectorStoreService.deleteByDocumentId(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @PutMapping("/index/{id}")
+    public ResponseEntity<Void> updateIndex(@PathVariable("id") String id, @Valid @RequestBody AIIndexRequest request) {
+        vectorStoreService.update(id, request);
         return ResponseEntity.accepted().build();
     }
 

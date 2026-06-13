@@ -8,6 +8,7 @@ import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -22,14 +23,19 @@ public class VectorStoreService {
 
     private static final Logger log = LoggerFactory.getLogger(VectorStoreService.class);
     private final VectorStore store;
+    private final JdbcTemplate jdbcTemplate;
 
-    public VectorStoreService(VectorStore store) {
+    public VectorStoreService(VectorStore store,
+                              JdbcTemplate jdbcTemplate
+    ) {
         this.store = store;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void save(AIIndexRequest request) {
         log.info("Indexando Documento Mongo con Vector Store");
         Map<String,Object> metadata = request.metadata();
+        metadata.put("document_id", request.id());
         metadata.put("tags",request.tags());
         metadata.put("tipo",request.tipo());
         Document document = Document.builder()
@@ -42,8 +48,35 @@ public class VectorStoreService {
 
         List<Document> chunks = splitter.apply(List.of(document));
 
-        store.add(chunks);
+        List<Document> normalized = chunks.stream()
+                .map(c -> Document.builder()
+                        .id(request.id())
+                        .text(c.getText())
+                        .metadata(c.getMetadata())
+                        .build())
+                .toList();
+
+        store.add(normalized);
         log.info("Documento guardado en Vector Store");
+    }
+
+    public void update(String id, AIIndexRequest request) {
+        log.info("Actualizando embeddings para document_id={} en Vector Store", id);
+        this.deleteByDocumentId(id);
+        this.save(request);
+        log.info("Embeddings actualizados para document_id={} en Vector Store", id);
+    }
+
+    public void deleteByDocumentId(String documentId) {
+        log.info("Eliminando embeddings para document_id={} en Vector Store (tabla ai_embeddings)", documentId);
+        try {
+            String sql = "DELETE FROM ai_embeddings WHERE id = ? OR metadata->>'document_id' = ?";
+            int rows = jdbcTemplate.update(sql, documentId, documentId);
+            log.info("Filas eliminadas en ai_embeddings: {}", rows);
+        } catch (Exception e) {
+            log.error("Error al eliminar embeddings para document_id={}: {}", documentId, e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Document> search(String query) {

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -39,5 +40,19 @@ public interface RAGController {
             @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
     })
     ResponseEntity<Void> indexPdf(@RequestPart("file") MultipartFile file);
+
+    @Operation(summary = "Eliminar index por id de documento", description = "Elimina todos los embeddings asociados al id del documento")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Eliminacion OK"),
+            @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
+    })
+    ResponseEntity<Void> deleteIndex(@NotBlank String id);
+
+    @Operation(summary = "Actualizar index por id de documento", description = "Elimina los embeddings asociados al id y re-indexa con el request recibido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Actualizacion aceptada"),
+            @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
+    })
+    ResponseEntity<Void> updateIndex(@NotBlank String id, @Valid @RequestBody AIIndexRequest request);
 }
 
