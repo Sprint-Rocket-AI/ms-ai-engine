@@ -35,6 +35,7 @@ public class VectorStoreConfig {
                 .distanceType(PgVectorStore.PgDistanceType.COSINE_DISTANCE)
                 .indexType(PgVectorStore.PgIndexType.HNSW)
                 .initializeSchema(true)
+                .idType(PgVectorStore.PgIdType.TEXT)
                 .maxDocumentBatchSize(10000)
                 .build();
     }

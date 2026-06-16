@@ -55,7 +55,6 @@ public class VectorStoreService {
                         .metadata(c.getMetadata())
                         .build())
                 .toList();
-
         store.add(normalized);
         log.info("Documento guardado en Vector Store");
     }
