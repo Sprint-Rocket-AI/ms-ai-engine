@@ -39,18 +39,18 @@ public class VectorStoreConfig {
                 .maxDocumentBatchSize(10000)
                 .build();
     }
-
-    @Bean(name = "redisCacheVectorStore")
-    public VectorStore redisCacheVectorStore(EmbeddingModel embeddingModel) {
-        JedisPooled jedis = new JedisPooled(redisHost, redisPort);
-
-        return RedisVectorStore.builder(jedis, embeddingModel)
-                .indexName(cacheIndex)
-                .prefix(cachePrefix)
-                //Tag = Similarity 0.95, solo recuperas el answer
-                //Text = Filtrar o buscas dentro del answer
-                .metadataFields(RedisVectorStore.MetadataField.tag("answer"))
-                .initializeSchema(true)
-                .build();
-    }
+//
+//    @Bean(name = "redisCacheVectorStore")
+//    public VectorStore redisCacheVectorStore(EmbeddingModel embeddingModel) {
+//        JedisPooled jedis = new JedisPooled(redisHost, redisPort);
+//
+//        return RedisVectorStore.builder(jedis, embeddingModel)
+//                .indexName(cacheIndex)
+//                .prefix(cachePrefix)
+//                //Tag = Similarity 0.95, solo recuperas el answer
+//                //Text = Filtrar o buscas dentro del answer
+//                .metadataFields(RedisVectorStore.MetadataField.tag("answer"))
+//                .initializeSchema(true)
+//                .build();
+//    }
 }

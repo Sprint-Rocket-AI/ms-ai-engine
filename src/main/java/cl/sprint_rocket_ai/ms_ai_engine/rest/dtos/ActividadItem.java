@@ -15,15 +15,7 @@ public record ActividadItem(
         String estado,
 
         @Schema(description = "Prioridad asignada", example = "ALTA")
-        String prioridad,
+        String prioridad
 
-        @Schema(description = "Ticket Jira vinculado", example = "SPRINT-1234")
-        String ticketJira,
-
-        @Schema(description = "Notas adicionales del desarrollador", example = "Pendiente revisión de seguridad")
-        String notas,
-
-        @Schema(description = "Horas reales invertidas", example = "3.5")
-        Double horasReales
 ) {
 }

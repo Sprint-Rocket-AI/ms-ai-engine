@@ -27,7 +27,7 @@ spring:
         timeout: 5m
       chat:
         options:
-          model: qwen3:4b
+          model: qwen2.5:7b
       embedding:
         options:
           model: qwen3-embedding:0.6b
@@ -36,14 +36,16 @@ spring:
     mcp:
       client:
         enabled: true
-        toolcallback:
-          enabled: true
-        streamable-http:
+        sse:
           connections:
-            github-mcp:
-              url: https://api.githubcopilot.com/mcp/
-              headers:
-                Authorization: Bearer ${GITHUB_MCP_TOKEN}
+            ms-checkpoint:
+              url: http://localhost:8082/sse
+#        streamable-http:
+#          connections:
+#            github-mcp:
+#              url: https://api.githubcopilot.com/mcp/
+#              headers:
+#                Authorization: Bearer ${GITHUB_MCP_TOKEN}
 
   datasource:
     url: jdbc:postgresql://localhost:5432/ai_engine
@@ -76,3 +78,8 @@ semantic:
     ttl-seconds: 3600
     index: "cache-index"
     prefix: "cache:"
+
+logging:
+  level:
+    org.springframework.ai.mcp: DEBUG
+    io.modelcontextprotocol: DEBUG
