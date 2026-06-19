@@ -1,6 +1,7 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.config.chat_memory;
 
-import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.ChatMessageDocument;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.ChatMessage;
+import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.Role;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.repositories.ChatMessageMongoRepository;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
@@ -17,13 +18,13 @@ public class MongoChatMemory implements ChatMemory {
     }
 
     @Override
-    public void add(String sesionId, List<Message> messages) {
+    public void add(String sessionId, List<Message> messages) {
 
-        List<ChatMessageDocument> entities = messages.stream()
+        List<ChatMessage> entities = messages.stream()
                 .map(msg -> {
-                    ChatMessageDocument entity = new ChatMessageDocument();
-                    entity.setSessionId(sesionId);
-                    entity.setRole(msg.getMessageType().name());
+                    ChatMessage entity = new ChatMessage();
+                    entity.setSessionId(sessionId);
+                    entity.setRole(Role.valueOf(msg.getMessageType().name()));
                     entity.setContent(msg.getText());
                     entity.setTimestamp(Instant.now());
                     return entity;
@@ -36,21 +37,18 @@ public class MongoChatMemory implements ChatMemory {
     @Override
     public List<Message> get(String sesionId) {
 
-        List<ChatMessageDocument> entities = repository.findTop10BySessionIdOrderByTimestampDesc(sesionId);
+        List<ChatMessage> entities = repository.findTop10BySessionIdOrderByTimestampDesc(sesionId);
 
         Collections.reverse(entities);
 
         List<Message> result = new ArrayList<>();
 
-        for (ChatMessageDocument m : entities) {
+        for (ChatMessage m : entities) {
             switch (m.getRole()) {
-                case "USER" -> result.add(new UserMessage(m.getContent()));
-                case "ASSISTANT" -> result.add(new AssistantMessage(m.getContent()));
-                case "SYSTEM" -> result.add(new SystemMessage(m.getContent()));
-                default -> {
-                    // fallback defensivo
-                    result.add(new UserMessage(m.getContent()));
-                }
+                case USER -> result.add(new UserMessage(m.getContent()));
+                case ASSISTANT -> result.add(new AssistantMessage(m.getContent()));
+                case SYSTEM -> result.add(new SystemMessage(m.getContent()));
+                default -> result.add(new UserMessage(m.getContent()));
             }
         }
 

@@ -6,11 +6,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 
 @Document(collection = "chat_messages")
-public class ChatMessageDocument {
+public class ChatMessage {
     @Id
     private String id;
     private String sessionId;
-    private String role;
+    private Role role;
     private String content;
     private Instant timestamp;
 
@@ -30,11 +30,11 @@ public class ChatMessageDocument {
         this.content = content;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
