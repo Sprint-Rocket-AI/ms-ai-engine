@@ -3,7 +3,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.service;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.Chat;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.repositories.ChatMongoRepository;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatResponse;
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.CreateChatRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,14 @@ public class ChatService {
         this.chatMongoRepository = chatMongoRepository;
     }
 
-    public String createChat(ChatRequest request) {
+    public String createChat(CreateChatRequest request) {
         log.info("Creando nuevo chat para userId: {}", request.userId());
         Chat chat = new Chat();
         chat.setSessionId(UUID.randomUUID().toString());
         Instant now = Instant.now();
         chat.setCreatedAt(now);
         chat.setUserId(request.userId());
+        chat.setTitle(request.title());
         chatMongoRepository.save(chat);
         log.info("Chat creado para userId: {} y sessionId: {}", request.userId(), chat.getSessionId());
         return chat.getSessionId();

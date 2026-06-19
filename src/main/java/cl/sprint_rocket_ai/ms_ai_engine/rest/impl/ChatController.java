@@ -1,8 +1,9 @@
-package cl.sprint_rocket_ai.ms_ai_engine.rest;
+package cl.sprint_rocket_ai.ms_ai_engine.rest.impl;
 
+import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatByUserIdRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatResponse;
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.CreateChatRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatMessageService;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatService;
 import jakarta.validation.Valid;
@@ -26,12 +27,12 @@ public class ChatController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody ChatRequest request) {
+    public ResponseEntity<String> create(@Valid @RequestBody CreateChatRequest request) {
         return ResponseEntity.ok(chatService.createChat(request));
     }
 
     @GetMapping
-    public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatRequest request) {
+    public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request) {
         return ResponseEntity.ok(chatService.getChatsByUserId(request.userId()));
     }
 

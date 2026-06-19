@@ -3,6 +3,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.config.chat_memory;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.ChatMessage;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.Role;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.repositories.ChatMessageMongoRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.*;
 
@@ -18,7 +19,7 @@ public class MongoChatMemory implements ChatMemory {
     }
 
     @Override
-    public void add(String sessionId, List<Message> messages) {
+    public void add(@NonNull String sessionId, List<Message> messages) {
 
         List<ChatMessage> entities = messages.stream()
                 .map(msg -> {
@@ -35,7 +36,7 @@ public class MongoChatMemory implements ChatMemory {
     }
 
     @Override
-    public List<Message> get(String sesionId) {
+    public List<Message> get(@NonNull String sesionId) {
 
         List<ChatMessage> entities = repository.findTop10BySessionIdOrderByTimestampDesc(sesionId);
 
@@ -56,7 +57,7 @@ public class MongoChatMemory implements ChatMemory {
     }
 
     @Override
-    public void clear(String sesionId) {
+    public void clear(@NonNull String sessionId) {
         // opcional: podrías implementar deleteBySessionId
     }
 }
