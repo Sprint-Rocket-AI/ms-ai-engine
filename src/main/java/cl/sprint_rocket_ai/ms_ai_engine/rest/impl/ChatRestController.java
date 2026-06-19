@@ -16,12 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/chat")
 @CrossOrigin(origins = "*")
-public class ChatController {
+public class ChatRestController {
 
     private final ChatService chatService;
     private final ChatMessageService chatMessageService;
 
-    public ChatController(ChatService chatService,ChatMessageService chatMessageService) {
+    public ChatRestController(ChatService chatService, ChatMessageService chatMessageService) {
         this.chatService = chatService;
         this.chatMessageService = chatMessageService;
     }
