@@ -1,5 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.rest.impl;
 
+import cl.sprint_rocket_ai.ms_ai_engine.rest.ChatController;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatByUserIdRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.ChatResponse;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/chat")
 @CrossOrigin(origins = "*")
-public class ChatRestController {
+public class ChatRestController implements ChatController {
 
     private final ChatService chatService;
     private final ChatMessageService chatMessageService;
@@ -31,7 +32,7 @@ public class ChatRestController {
         return ResponseEntity.ok(chatService.createChat(request));
     }
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request) {
         return ResponseEntity.ok(chatService.getChatsByUserId(request.userId()));
     }
