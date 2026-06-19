@@ -28,5 +28,12 @@ public class ChatMessageService {
                 .map(ChatMessageResponse::from)
                 .toList();
     }
+
+    public long deleteMessagesBySessionId(String sessionId) {
+        log.info("Eliminando mensajes para sessionId: {}", sessionId);
+        long deletedCount = messageRepository.deleteBySessionId(sessionId);
+        log.info("Se eliminaron {} mensajes para sessionId: {}", deletedCount, sessionId);
+        return deletedCount;
+    }
 }
 

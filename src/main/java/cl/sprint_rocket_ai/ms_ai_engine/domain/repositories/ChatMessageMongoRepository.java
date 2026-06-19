@@ -8,4 +8,5 @@ import java.util.List;
 public interface ChatMessageMongoRepository extends MongoRepository<ChatMessage, String> {
     List<ChatMessage> findTop10BySessionIdOrderByTimestampDesc(String sessionId);
     List<ChatMessage> findBySessionIdOrderByTimestampAsc(String sessionId);
+    long deleteBySessionId(String sessionId);
 }

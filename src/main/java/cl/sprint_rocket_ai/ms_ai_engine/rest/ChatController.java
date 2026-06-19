@@ -46,5 +46,12 @@ public interface ChatController {
     })
     ResponseEntity<List<ChatMessageResponse>> getMessagesChatBySessionId(
             @Parameter(description = "Id de la sesion de chat", required = true) @PathVariable String sessionId);
+
+    @Operation(summary = "Eliminar chat por sessionId", description = "Elimina la sesion de chat y todos sus mensajes asociados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Operacion completada", content = @Content)
+    })
+    ResponseEntity<Void> deleteChatBySessionId(
+            @Parameter(description = "Id de la sesion de chat", required = true) @PathVariable String sessionId);
 }
 

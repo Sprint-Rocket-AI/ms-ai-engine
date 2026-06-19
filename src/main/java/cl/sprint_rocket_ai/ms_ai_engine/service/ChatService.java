@@ -45,5 +45,12 @@ public class ChatService {
                 .toList();
     }
 
+    public long deleteChatBySessionId(String sessionId) {
+        log.info("Eliminando chat para sessionId: {}", sessionId);
+        long deletedCount = chatMongoRepository.deleteBySessionId(sessionId);
+        log.info("Se eliminaron {} chats para sessionId: {}", deletedCount, sessionId);
+        return deletedCount;
+    }
+
 }
 

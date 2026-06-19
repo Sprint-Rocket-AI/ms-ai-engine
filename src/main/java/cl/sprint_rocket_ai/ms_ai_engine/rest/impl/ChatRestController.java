@@ -8,6 +8,8 @@ import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.chat.CreateChatRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatMessageService;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,8 @@ import java.util.List;
 @RequestMapping("/chat")
 @CrossOrigin(origins = "*")
 public class ChatRestController implements ChatController {
+
+    private static final Logger log = LoggerFactory.getLogger(ChatRestController.class);
 
     private final ChatService chatService;
     private final ChatMessageService chatMessageService;
@@ -40,6 +44,14 @@ public class ChatRestController implements ChatController {
     @GetMapping("/{sessionId}/messages")
     public ResponseEntity<List<ChatMessageResponse>> getMessagesChatBySessionId(@PathVariable String sessionId){
         return ResponseEntity.ok(chatMessageService.getFullHistory(sessionId));
+    }
+
+    @DeleteMapping("/{sessionId}")
+    public ResponseEntity<Void> deleteChatBySessionId(@PathVariable String sessionId) {
+        long deletedMessages = chatMessageService.deleteMessagesBySessionId(sessionId);
+        long deletedChats = chatService.deleteChatBySessionId(sessionId);
+        log.info("Eliminacion completada para sessionId: {}. chats={}, mensajes={}", sessionId, deletedChats, deletedMessages);
+        return ResponseEntity.noContent().build();
     }
 }
 
