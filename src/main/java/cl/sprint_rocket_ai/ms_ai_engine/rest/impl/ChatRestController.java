@@ -32,12 +32,12 @@ public class ChatRestController implements ChatController {
         return ResponseEntity.ok(chatService.createChat(request));
     }
 
-    @PostMapping
+    @PostMapping("/list")
     public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request) {
         return ResponseEntity.ok(chatService.getChatsByUserId(request.userId()));
     }
 
-    @GetMapping("/{sessionId}")
+    @GetMapping("/{sessionId}/messages")
     public ResponseEntity<List<ChatMessageResponse>> getMessagesChatBySessionId(@PathVariable String sessionId){
         return ResponseEntity.ok(chatMessageService.getFullHistory(sessionId));
     }
