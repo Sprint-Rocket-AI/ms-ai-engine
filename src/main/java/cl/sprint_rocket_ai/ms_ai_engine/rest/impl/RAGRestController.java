@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/rag")
+@RequestMapping("/api/rag")
 public class RAGRestController implements RAGController {
     private final RAGService ragService;
     private final VectorStoreService vectorStoreService;
