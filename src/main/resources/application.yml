@@ -41,9 +41,10 @@ spring:
             ms-checkpoint:
               url: http://localhost:8082/sse
       jira:
-        url: https://spring-rocket-ai.atlassian.net
-        email: ${JIRA_EMAIL:sebascarrenom@gmail.com}
-        api-token: ${JIRA_API_TOKEN:}
+        url: ${JIRA_URL}
+        email: ${JIRA_EMAIL}
+        api-token: ${JIRA_API_TOKEN}
+
 #        streamable-http:
 #          connections:
 #            github-mcp:
