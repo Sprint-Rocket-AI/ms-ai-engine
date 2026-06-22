@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
-import redis.clients.jedis.JedisPooled;
+import redis.clients.jedis.RedisClient;
 
 @Configuration
 public class VectorStoreConfig {
@@ -31,7 +31,7 @@ public class VectorStoreConfig {
     public VectorStore pgVectorStore(JdbcTemplate jdbcTemplate, EmbeddingModel embeddingModel) {
         return PgVectorStore.builder(jdbcTemplate, embeddingModel)
                 .vectorTableName("ai_embeddings")
-                .dimensions(768)
+                .dimensions(1024)
                 .distanceType(PgVectorStore.PgDistanceType.COSINE_DISTANCE)
                 .indexType(PgVectorStore.PgIndexType.HNSW)
                 .initializeSchema(true)
@@ -42,9 +42,8 @@ public class VectorStoreConfig {
 
     @Bean(name = "redisCacheVectorStore")
     public VectorStore redisCacheVectorStore(EmbeddingModel embeddingModel) {
-        JedisPooled jedis = new JedisPooled(redisHost, redisPort);
-
-        return RedisVectorStore.builder(jedis, embeddingModel)
+        RedisClient redisClient = RedisClient.create(redisHost, redisPort);
+        return RedisVectorStore.builder(redisClient, embeddingModel)
                 .indexName(cacheIndex)
                 .prefix(cachePrefix)
                 //Tag = Similarity 0.95, solo recuperas el answer
