@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.service;
 
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.AIIndexRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.AIIndexRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
