@@ -2,9 +2,9 @@ package cl.sprint_rocket_ai.ms_ai_engine.service;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.DefaultPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.config.semantic_cache.SemanticCacheAdvisor;
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.AIRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.ChatSpringAI;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.semantic_cache.SemanticCacheAdvisor;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.AIRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.ChatSpringAI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;

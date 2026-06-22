@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.0.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cl.sprint_rocket_ai</groupId>
@@ -29,7 +29,7 @@
 
     <properties>
         <java.version>25</java.version>
-        <spring-ai.version>2.0.0-RC2</spring-ai.version>
+        <spring-ai.version>2.0.0</spring-ai.version>
     </properties>
 
     <repositories>
@@ -44,6 +44,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>7.5.2</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -71,6 +77,15 @@
 <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-starter-mcp-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
+            <artifactId>spring-ai-vector-store-advisor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-starter-vector-store-redis</artifactId>
         </dependency>
         <dependency>
@@ -96,15 +111,13 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-mcp-client</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mongodb</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>5.2.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

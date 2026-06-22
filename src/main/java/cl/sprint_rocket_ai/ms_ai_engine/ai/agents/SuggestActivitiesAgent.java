@@ -2,9 +2,9 @@ package cl.sprint_rocket_ai.ms_ai_engine.ai.agents;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.SuggestActivitiesPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.ai.ChatSpringAI;
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.SugerirActividadesRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.rest.dtos.SugerirActividadesResponse;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.ChatSpringAI;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.SugerirActividadesRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.SugerirActividadesResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
