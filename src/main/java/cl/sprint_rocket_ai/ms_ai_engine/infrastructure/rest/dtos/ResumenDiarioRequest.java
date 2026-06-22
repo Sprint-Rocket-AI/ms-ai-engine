@@ -1,5 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos;
 
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.ActividadItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

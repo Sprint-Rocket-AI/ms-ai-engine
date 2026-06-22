@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders;
 
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ActividadItem;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.ActividadItem;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

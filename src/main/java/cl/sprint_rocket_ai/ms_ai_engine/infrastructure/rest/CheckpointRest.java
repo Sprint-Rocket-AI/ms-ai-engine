@@ -2,8 +2,8 @@ package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest;
 
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioResponse;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.SugerirActividadesRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.SugerirActividadesResponse;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.SugerirActividadesRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.SugerirActividadesResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

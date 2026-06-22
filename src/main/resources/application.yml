@@ -31,7 +31,7 @@ spring:
       embedding:
         options:
           model: qwen3-embedding:0.6b
-          dimensions: 768
+          dimensions: 1024
 
     mcp:
       client:
@@ -40,18 +40,13 @@ spring:
           connections:
             ms-checkpoint:
               url: http://localhost:8082/sse
-      jira:
-        url: ${JIRA_URL}
-        email: ${JIRA_EMAIL}
-        api-token: ${JIRA_API_TOKEN}
-
 #        streamable-http:
 #          connections:
 #            github-mcp:
 #              url: https://api.githubcopilot.com/mcp/
 #              headers:
 #                Authorization: Bearer ${GITHUB_MCP_TOKEN}
-          dimensions: 1024
+#
 
   datasource:
     url: jdbc:postgresql://localhost:5432/ai_engine

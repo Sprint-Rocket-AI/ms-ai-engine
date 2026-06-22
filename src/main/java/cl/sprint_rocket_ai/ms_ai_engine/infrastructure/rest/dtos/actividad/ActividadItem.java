@@ -1,4 +1,4 @@
-package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos;
+package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
