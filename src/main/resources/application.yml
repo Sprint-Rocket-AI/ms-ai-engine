@@ -43,7 +43,7 @@ spring:
       jira:
         url: https://spring-rocket-ai.atlassian.net
         email: ${JIRA_EMAIL:sebascarrenom@gmail.com}
-        api-token: ${JIRA_API_TOKEN:ATATT3xFfGF0amzLF1xaCkNnToZcGqKiSd52cIDcz3xKaLOOcx8_IifczPiRH6RjkJoplq07iOZvgP9v2ZRq2PwgSntHvwpfNZHf1LeeJverNdj_9GUsIwmIiFtky7fY1LrJrk3aJm1IGDpkA3wpAlO8GPVcuoQM1LcQEVH3Fs3CmYllnutDjlk=D546540A}
+        api-token: ${JIRA_API_TOKEN:}
 #        streamable-http:
 #          connections:
 #            github-mcp:
