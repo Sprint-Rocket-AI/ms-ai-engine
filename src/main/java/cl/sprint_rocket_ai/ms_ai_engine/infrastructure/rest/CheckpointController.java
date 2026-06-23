@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Checkpoint AI", description = "Endpoints de IA para el módulo Checkpoint: sugerencias y resumen diario")
-public interface CheckpointRest {
+public interface CheckpointController {
 
     @Operation(
             summary = "Sugerir actividades de continuidad",

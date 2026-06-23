@@ -27,7 +27,7 @@ spring:
         timeout: 5m
       chat:
         options:
-          model: qwen3:4b
+          model: qwen2.5:7b
       embedding:
         options:
           model: qwen3-embedding:0.6b

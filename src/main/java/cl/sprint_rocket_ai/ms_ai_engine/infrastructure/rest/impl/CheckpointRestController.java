@@ -2,7 +2,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.impl;
 
 import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.DailySummaryAgent;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.SuggestActivitiesAgent;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.CheckpointRest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.CheckpointController;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.SugerirActividadesRequest;
@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/checkpoint")
-public class CheckpointController implements CheckpointRest {
+public class CheckpointRestController implements CheckpointController {
 
     private final SuggestActivitiesAgent suggestActivitiesAgent;
     private final DailySummaryAgent dailySummaryAgent;
 
-    public CheckpointController(SuggestActivitiesAgent suggestActivitiesAgent,
-                                DailySummaryAgent dailySummaryAgent) {
+    public CheckpointRestController(SuggestActivitiesAgent suggestActivitiesAgent,
+                                    DailySummaryAgent dailySummaryAgent) {
         this.suggestActivitiesAgent = suggestActivitiesAgent;
         this.dailySummaryAgent = dailySummaryAgent;
     }
