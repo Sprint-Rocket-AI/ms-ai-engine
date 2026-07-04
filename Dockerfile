@@ -1,34 +1,26 @@
-# ── Stage 1: Build ──────────────────────────────────────────
-# Usamos eclipse-temurin:25-jdk para coincidir con java.version=25 del pom.xml
-# y el Maven Wrapper (./mvnw) del propio proyecto en lugar de la imagen maven:3.9
+# ---------- BUILD ----------
 FROM eclipse-temurin:25-jdk AS builder
-WORKDIR /app
 
-# Copiar Maven Wrapper primero para cachear la descarga de Maven
+WORKDIR /build
+
 COPY .mvn/ .mvn/
 COPY mvnw .
 RUN chmod +x mvnw
 
-# Descargar dependencias (capa cacheada separada del código fuente)
 COPY pom.xml .
-RUN ./mvnw dependency:go-offline -q
+RUN ./mvnw -B -q -e -DskipTests dependency:go-offline
 
-# Compilar y empaquetar
 COPY src ./src
-RUN ./mvnw package -DskipTests -q
+RUN ./mvnw -B -DskipTests package
 
-# ── Stage 2: Runtime ─────────────────────────────────────────
+# ---------- RUNTIME ----------
 FROM eclipse-temurin:25-jre
+
 WORKDIR /app
 
-LABEL maintainer="SpringRocket IA"
-LABEL service="ms-ai-engine"
+COPY --from=builder /build/target/*.jar app.jar
 
-RUN groupadd -r spring && useradd -r -g spring spring
-USER spring
+ENV PORT=8080
+EXPOSE 8080
 
-COPY --from=builder /app/target/*.jar app.jar
-
-EXPOSE 8081
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar --server.port=$PORT"]
