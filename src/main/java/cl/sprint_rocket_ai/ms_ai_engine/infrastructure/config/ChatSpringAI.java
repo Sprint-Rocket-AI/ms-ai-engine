@@ -16,10 +16,8 @@ public class ChatSpringAI {
 
     public ChatSpringAI(ChatClient.Builder chatClientBuilder,
                         List<ToolCallbackProvider> providers) {
-
-        System.out.println("Providers encontrados: " + providers.size());
         this.chatClient = chatClientBuilder
-                .defaultTools(providers.toArray(new ToolCallbackProvider[0]))
+                .defaultTools(providers)
                 .build();
     }
 

@@ -56,11 +56,8 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: mydatabase
-      username: myuser
-      password: mypassword
+        uri: ${MONGODB_URI}
+        database: ${MONGODB_DATABASE}
 
     redis:
       host: localhost
@@ -69,7 +66,7 @@ spring:
 
 
 server:
-  port: 8081
+  port: 8080
   servlet:
     context-path: /ai-engine
 
