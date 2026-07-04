@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class VectorStoreService {
@@ -45,7 +46,7 @@ public class VectorStoreService {
 
         List<Document> normalized = chunks.stream()
                 .map(c -> Document.builder()
-                        .id(request.id())
+                        .id(UUID.randomUUID().toString())
                         .text(c.getText())
                         .metadata(c.getMetadata())
                         .build())

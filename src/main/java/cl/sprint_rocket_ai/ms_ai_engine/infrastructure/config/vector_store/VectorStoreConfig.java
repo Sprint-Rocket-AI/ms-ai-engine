@@ -11,16 +11,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import redis.clients.jedis.RedisClient;
 
-import java.util.List;
-
 @Configuration
 public class VectorStoreConfig {
-
-    @Value("${semantic.cache.index}")
-    private String cacheIndex;
-
-    @Value("${semantic.cache.prefix}")
-    private String cachePrefix;
 
     @Value("${semantic.cache.redis.host}")
     private String cacheRedisHost;
@@ -34,23 +26,17 @@ public class VectorStoreConfig {
     @Value("${semantic.cache.redis.password}")
     private String cacheRedisPassword;
 
-    @Value("${spring.ai.vectorstore.mongodb.collection-name}")
-    private String vectorCollectionName;
-
-    @Value("${spring.ai.vectorstore.mongodb.index-name}")
-    private String vectorIndexName;
-
-    @Value("${spring.ai.vectorstore.mongodb.path-name}")
-    private String vectorPathName;
-
     @Bean(name = "mongoAtlasVectorStore")
     @Primary
     public VectorStore mongoAtlasVectorStore(MongoTemplate mongoTemplate, EmbeddingModel embeddingModel) {
+        String vectorCollectionName = "vector_store";
+        String vectorIndexName = "vector_index";
+        String vectorPathName = "embedding";
+
         return MongoDBAtlasVectorStore.builder(mongoTemplate, embeddingModel)
                 .collectionName(vectorCollectionName)
                 .vectorIndexName(vectorIndexName)
                 .pathName(vectorPathName)
-                .metadataFieldsToFilter(List.of("tags", "tipo"))
                 .initializeSchema(false)
                 .build();
     }
@@ -58,8 +44,10 @@ public class VectorStoreConfig {
     @Bean(name = "redisCacheVectorStore")
     public VectorStore redisCacheVectorStore(EmbeddingModel embeddingModel) {
         RedisClient redisClient = RedisClient.create(cacheRedisHost, cacheRedisPort, cacheRedisUser, cacheRedisPassword);
+        String indexName = "cache-index";
+        String cachePrefix = "cache:";
         return RedisVectorStore.builder(redisClient, embeddingModel)
-                .indexName(cacheIndex)
+                .indexName(indexName)
                 .prefix(cachePrefix)
                 .metadataFields(RedisVectorStore.MetadataField.tag("answer"))
                 .initializeSchema(true)

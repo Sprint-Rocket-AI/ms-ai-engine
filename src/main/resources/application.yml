@@ -33,16 +33,6 @@ spring:
           model: qwen3-embedding:0.6b
           dimensions: 1024
 
-    vectorstore:
-      mongodb:
-        collection-name: ${MONGODB_VECTOR_COLLECTION:vector_store}
-        index-name: ${MONGODB_VECTOR_INDEX:vector_index}
-        path-name: ${MONGODB_VECTOR_PATH:embedding}
-        initialize-schema: false
-        metadata-fields-to-filter:
-          - tags
-          - tipo
-
     mcp:
       client:
         enabled: true
@@ -72,8 +62,6 @@ semantic:
       password: ${REDIS_CACHE_PASSWORD}
     similarity-threshold: 0.95
     ttl-seconds: 3600
-    index: "cache-index"
-    prefix: "cache:"
 
 logging:
   level:
