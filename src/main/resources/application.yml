@@ -84,3 +84,5 @@ logging:
   level:
     org.springframework.ai.mcp: DEBUG
     io.modelcontextprotocol: DEBUG
+cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS}
