@@ -27,11 +27,21 @@ spring:
         timeout: 5m
       chat:
         options:
-          model: qwen2.5:7b
+          model: qwen3:4b
       embedding:
         options:
           model: qwen3-embedding:0.6b
           dimensions: 1024
+
+    vectorstore:
+      mongodb:
+        collection-name: ${MONGODB_VECTOR_COLLECTION:vector_store}
+        index-name: ${MONGODB_VECTOR_INDEX:vector_index}
+        path-name: ${MONGODB_VECTOR_PATH:embedding}
+        initialize-schema: false
+        metadata-fields-to-filter:
+          - tags
+          - tipo
 
     mcp:
       client:
@@ -40,40 +50,26 @@ spring:
         sse:
           connections:
             ms-checkpoint:
-              url: http://localhost:8082/sse
-
-#        streamable-http:
-#          connections:
-#            github-mcp:
-#              url: https://api.githubcopilot.com/mcp/
-#              headers:
-#                Authorization: Bearer ${GITHUB_MCP_TOKEN}
-#
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ai_engine
-    username: ai_engine
-    password: ai_engine
-    driver-class-name: org.postgresql.Driver
+              url: ${URL_MCP_SSE_CHECKPOINT}
 
   data:
     mongodb:
-        uri: ${MONGODB_URI}
-        database: ${MONGODB_DATABASE}
-
-    redis:
-      host: localhost
-      port: 6379
-      timeout: 60000
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE}
 
 
 server:
-  port: 8080
+  port: ${PORT}
   servlet:
     context-path: /ai-engine
 
 semantic:
   cache:
+    redis:
+      host: ${REDIS_CACHE_HOST}
+      port: ${REDIS_CACHE_PORT}
+      user: ${REDIS_CACHE_USER}
+      password: ${REDIS_CACHE_PASSWORD}
     similarity-threshold: 0.95
     ttl-seconds: 3600
     index: "cache-index"

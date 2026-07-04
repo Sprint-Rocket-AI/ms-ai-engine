@@ -8,7 +8,6 @@ import org.springframework.ai.reader.pdf.PagePdfDocumentReader;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -23,13 +22,9 @@ public class VectorStoreService {
 
     private static final Logger log = LoggerFactory.getLogger(VectorStoreService.class);
     private final VectorStore store;
-    private final JdbcTemplate jdbcTemplate;
 
-    public VectorStoreService(VectorStore store,
-                              JdbcTemplate jdbcTemplate
-    ) {
+    public VectorStoreService(VectorStore store) {
         this.store = store;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void save(AIIndexRequest request) {
@@ -67,15 +62,14 @@ public class VectorStoreService {
     }
 
     public void deleteByDocumentId(String documentId) {
-        log.info("Eliminando embeddings para document_id={} en Vector Store (tabla ai_embeddings)", documentId);
-        try {
-            String sql = "DELETE FROM ai_embeddings WHERE id = ? OR metadata->>'document_id' = ?";
-            int rows = jdbcTemplate.update(sql, documentId, documentId);
-            log.info("Filas eliminadas en ai_embeddings: {}", rows);
-        } catch (Exception e) {
-            log.error("Error al eliminar embeddings para document_id={}: {}", documentId, e.getMessage());
-            throw new RuntimeException(e);
-        }
+        log.info("Eliminando embeddings para document_id={} en Vector Store", documentId);
+            try {
+                store.delete(documentId);
+                log.info("Embeddings eliminados por id={}", documentId);
+            } catch (Exception deleteException) {
+                log.error("Error al eliminar embeddings para document_id={}: {}", documentId, deleteException.getMessage());
+                throw new RuntimeException(deleteException);
+            }
     }
 
     public List<Document> search(String query) {

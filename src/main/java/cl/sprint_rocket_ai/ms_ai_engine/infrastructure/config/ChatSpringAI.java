@@ -14,10 +14,11 @@ public class ChatSpringAI {
     private static final Logger log = LoggerFactory.getLogger(ChatSpringAI.class);
     private final ChatClient chatClient;
 
-    public ChatSpringAI(ChatClient.Builder chatClientBuilder,
-                        List<ToolCallbackProvider> providers) {
+    public ChatSpringAI(ChatClient.Builder chatClientBuilder
+    //                    List<ToolCallbackProvider> providers
+    ) {
         this.chatClient = chatClientBuilder
-                .defaultTools(providers)
+        //        .defaultTools(providers)
                 .build();
     }
 
