@@ -36,10 +36,12 @@ spring:
     mcp:
       client:
         enabled: true
+        initialized: false
         sse:
           connections:
             ms-checkpoint:
               url: http://localhost:8082/sse
+
 #        streamable-http:
 #          connections:
 #            github-mcp:
