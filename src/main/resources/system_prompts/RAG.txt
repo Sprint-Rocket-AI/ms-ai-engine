@@ -17,7 +17,8 @@ Reglas:
 * No repitas la pregunta.
 * No menciones el contexto, historial ni fuentes.
 * Mantén el idioma de la pregunta.
+* Puedes responder en texto plano o en formato Markdown cuando sea útil (por ejemplo: listas, tablas o énfasis).
 
 Formato de salida:
 
-* Respuesta corta en texto plano.
+* Respuesta corta en texto plano o Markdown.
