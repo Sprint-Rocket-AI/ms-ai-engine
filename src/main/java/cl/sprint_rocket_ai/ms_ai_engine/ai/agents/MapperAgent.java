@@ -24,11 +24,15 @@ public class MapperAgent {
     private final ChatSpringAI chatSpringAI;
     private final ObjectMapper mapper;
 
-    public MapperAgent(SystemPromptLoaderUtils loaderUtils, MapperPromptBuilder promptBuilder, ChatSpringAI chatSpringAI) {
+    public MapperAgent(SystemPromptLoaderUtils loaderUtils,
+                       MapperPromptBuilder promptBuilder,
+                       ChatSpringAI chatSpringAI,
+                       ObjectMapper objectMapper
+                       ) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
         this.chatSpringAI = chatSpringAI;
-        this.mapper = new ObjectMapper();
+        this.mapper = objectMapper;
     }
 
     public Map<String, Object> map (PromptMapperRequest request){

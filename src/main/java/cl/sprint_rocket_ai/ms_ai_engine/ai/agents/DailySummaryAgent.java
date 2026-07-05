@@ -24,11 +24,13 @@ public class DailySummaryAgent {
 
     public DailySummaryAgent(SystemPromptLoaderUtils loaderUtils,
                              DailySummaryPromptBuilder promptBuilder,
-                             ChatSpringAI chatSpringAI) {
+                             ChatSpringAI chatSpringAI,
+                             ObjectMapper objectMapper
+                             ) {
         this.loaderUtils = loaderUtils;
         this.promptBuilder = promptBuilder;
         this.chatSpringAI = chatSpringAI;
-        this.mapper = new ObjectMapper();
+        this.mapper = objectMapper;
     }
 
     public ResumenDiarioResponse dailySummary(ResumenDiarioRequest request) {
