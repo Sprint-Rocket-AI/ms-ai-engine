@@ -37,7 +37,7 @@ public class VectorStoreConfig {
                 .collectionName(vectorCollectionName)
                 .vectorIndexName(vectorIndexName)
                 .pathName(vectorPathName)
-                .initializeSchema(false)
+                .initializeSchema(true)
                 .build();
     }
 
