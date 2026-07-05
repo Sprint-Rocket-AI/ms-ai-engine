@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.service;
 
-import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.DefaultPromptBuilder;
+import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders.RAGPromptBuilder;
 import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.utils.SystemPromptLoaderUtils;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.semantic_cache.SemanticCacheAdvisor;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.AIRequest;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.RAG;
 
 @Service
 public class RAGService {
@@ -22,13 +21,13 @@ public class RAGService {
 
     private final ChatSpringAI chatSpringAI;
     private final VectorStoreService vectorStoreService;
-    private final DefaultPromptBuilder promptBuilder;
+    private final RAGPromptBuilder promptBuilder;
     private final SystemPromptLoaderUtils loaderUtils;
     private final SemanticCacheAdvisor semanticCache;
 
     public RAGService(ChatSpringAI chatSpringAI,
                       VectorStoreService vectorStoreService,
-                      DefaultPromptBuilder promptBuilder,
+                      RAGPromptBuilder promptBuilder,
                       SystemPromptLoaderUtils loaderUtils,
                       SemanticCacheAdvisor semanticCache) {
         this.chatSpringAI = chatSpringAI;
@@ -54,7 +53,7 @@ public class RAGService {
         String context = getContext(vectorStoreService.search(request.userPrompt()));
         log.info("Contruyendo prompt...");
         String prompt = promptBuilder.buildWithContext(request.userPrompt(), context);
-        String systemPrompt = loaderUtils.load(RAG.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("Fin de la construcción");
         return chatSpringAI.generate(request.sessionId(), systemPrompt, prompt);
     }

@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.CHECKPOINT_SUGGEST;
 
 @Service
 public class SuggestActivitiesAgent {
@@ -41,7 +40,7 @@ public class SuggestActivitiesAgent {
         String prompt = promptBuilder.buildSuggestionPrompt(request.userId(), request.fecha(), request.actividades());
         log.info("Prompt creado, cargando systemPrompt");
 
-        String systemPrompt = loaderUtils.load(CHECKPOINT_SUGGEST.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("SystemPrompt cargado correctamente");
 
         String jsonString = chatSpringAI.generate(sessionId, systemPrompt, prompt);

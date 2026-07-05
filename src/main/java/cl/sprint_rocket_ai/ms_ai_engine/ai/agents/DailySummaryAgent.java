@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.CHECKPOINT_DAILY_SUMMARY;
-
 @Service
 public class DailySummaryAgent {
 
@@ -34,17 +32,16 @@ public class DailySummaryAgent {
     }
 
     public ResumenDiarioResponse dailySummary(ResumenDiarioRequest request) {
-        String sessionId = request.userId();
-        log.info("Iniciando Daily Summary Agent sessionId: {}", sessionId);
+        log.info("Iniciando Daily Summary Agent");
         log.info("Parámetros - fecha: {}, actividades: {}", request.fecha(), request.actividades().size());
 
         String prompt = promptBuilder.buildSummaryPrompt(request.userId(), request.fecha(), request.actividades());
         log.info("Prompt creado, cargando systemPrompt");
 
-        String systemPrompt = loaderUtils.load(CHECKPOINT_DAILY_SUMMARY.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("SystemPrompt cargado correctamente");
 
-        String jsonString = chatSpringAI.generate(sessionId, systemPrompt, prompt);
+        String jsonString = chatSpringAI.generate(systemPrompt, prompt);
         log.info("Fin de Daily Summary Agent");
 
         return toResponseClass(jsonString);

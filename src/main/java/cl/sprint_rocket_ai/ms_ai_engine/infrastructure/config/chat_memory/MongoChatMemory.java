@@ -9,6 +9,8 @@ import org.springframework.ai.chat.messages.*;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MongoChatMemory implements ChatMemory {
 
@@ -23,10 +25,11 @@ public class MongoChatMemory implements ChatMemory {
 
         List<ChatMessage> entities = messages.stream()
                 .map(msg -> {
+                    String cleanedContent = cleanContentToPersist(msg.getText());
                     ChatMessage entity = new ChatMessage();
                     entity.setSessionId(sessionId);
                     entity.setRole(Role.valueOf(msg.getMessageType().name()));
-                    entity.setContent(msg.getText());
+                    entity.setContent(cleanedContent);
                     entity.setTimestamp(Instant.now());
                     return entity;
                 })
@@ -60,5 +63,15 @@ public class MongoChatMemory implements ChatMemory {
     public void clear(@NonNull String sessionId) {
         // opcional: podrías implementar deleteBySessionId
         //repository.deleteBySessionId(sessionId);
+    }
+
+    private String cleanContentToPersist(String content) {
+        Pattern pattern = Pattern.compile("<question>(.*?)</question>", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(content);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        }
+        return content;
     }
 }

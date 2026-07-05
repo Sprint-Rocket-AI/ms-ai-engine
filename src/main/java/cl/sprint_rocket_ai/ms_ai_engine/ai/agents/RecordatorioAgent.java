@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.RECORDATORIO_TOOL;
 
 @Service
 public class RecordatorioAgent {
@@ -35,7 +34,7 @@ public class RecordatorioAgent {
         String prompt = promptBuilder.build(request.query(), request.userId(),fechaActual);
         log.info("Prompt creado, cargando systemPrompt");
 
-        String systemPrompt = loaderUtils.load(RECORDATORIO_TOOL.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("SystemPrompt cargado correctamente");
 
         String response = chatSpringAI.generate(sessionId, systemPrompt, prompt);

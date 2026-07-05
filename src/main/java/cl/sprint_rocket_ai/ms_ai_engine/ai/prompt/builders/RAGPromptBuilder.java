@@ -1,9 +1,15 @@
 package cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.builders;
 
+import cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.PromptTypeEnum;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DefaultPromptBuilder {
+public class RAGPromptBuilder implements AbstractPromptBuilder{
+
+    @Override
+    public PromptTypeEnum getType() {
+        return PromptTypeEnum.RAG;
+    }
 
     private static final String TEMPLATE_WITH_CONTEXT = """
         <context>

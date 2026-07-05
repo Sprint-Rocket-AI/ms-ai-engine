@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.ACTIVIDAD_TOOL;
 
 @Service
 public class ActividadAgent {
@@ -32,7 +31,7 @@ public class ActividadAgent {
         log.info("Iniciando  ActividadAgent sessionId: {}", sessionId);
         String prompt = promptBuilder.build(request.query(), request.userId());
         log.info("Prompt creado, cargando systemPrompt");
-        String systemPrompt = loaderUtils.load(ACTIVIDAD_TOOL.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("SystemPrompt cargado correctamente");
 
         String response = chatSpringAI.generate(sessionId, systemPrompt, prompt);

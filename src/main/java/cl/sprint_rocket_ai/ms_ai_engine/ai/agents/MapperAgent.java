@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static cl.sprint_rocket_ai.ms_ai_engine.ai.prompt.SystemPromptTypeEnum.MAPPER;
-
 @Service
 public class MapperAgent {
     private static final Logger log = LoggerFactory.getLogger(MapperAgent.class);
@@ -36,15 +34,14 @@ public class MapperAgent {
     }
 
     public Map<String, Object> map (PromptMapperRequest request){
-        String sessionId = request.sessionId();
-        log.info("Iniciando Prompt Mapper sessionId: {}",sessionId);
+        log.info("Iniciando Prompt Mapper");
         String userPrompt = request.content();
         log.info("Iniciando prompt: {}",userPrompt);
         String prompt = promptBuilder.build(userPrompt,request.template());
         log.info("Prompt creado, cargando systemPrompt");
-        String systemPrompt = loaderUtils.load(MAPPER.getPath());
+        String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("SystemPrompt cargado correctamente");
-        String jsonString = chatSpringAI.generate(sessionId,systemPrompt,prompt);
+        String jsonString = chatSpringAI.generate(systemPrompt,prompt);
         log.info("Fin de Prompt Mapper");
         return toMapClass(jsonString);
     }

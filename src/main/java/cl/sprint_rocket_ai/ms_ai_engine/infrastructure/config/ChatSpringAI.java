@@ -38,4 +38,14 @@ public class ChatSpringAI {
         return response;
     }
 
+    public String generate(String systemPrompt, String userPrompt) {
+        log.info("Generando respuesta desde AI");
+        String response = chatClient.prompt()
+                .system(systemPrompt)
+                .user(userPrompt)
+                .call()
+                .content();
+        log.info("Respuesta generada");
+        return response;
+    }
 }

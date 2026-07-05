@@ -1,6 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.ai.prompt;
 
-public enum SystemPromptTypeEnum {
+public enum PromptTypeEnum {
     MAPPER("system_prompts/MAPPER.txt"),
     RAG("system_prompts/RAG.txt"),
     CHECKPOINT_SUGGEST("system_prompts/CHECKPOINT_SUGGEST.txt"),
@@ -10,13 +10,13 @@ public enum SystemPromptTypeEnum {
     JIRA_TOOL("system_prompts/JIRA_TOOL.txt")
     ;
 
-    private final String path;
+    private final String pathSystemPrompt;
 
-    SystemPromptTypeEnum(String path) {
-        this.path = path;
+    PromptTypeEnum(String pathSystemPrompt) {
+        this.pathSystemPrompt = pathSystemPrompt;
     }
 
-    public String getPath() {
-        return path;
+    public String getPathSystemPrompt() {
+        return pathSystemPrompt;
     }
 }
