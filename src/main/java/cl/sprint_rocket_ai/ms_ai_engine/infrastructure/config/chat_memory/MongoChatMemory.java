@@ -59,5 +59,6 @@ public class MongoChatMemory implements ChatMemory {
     @Override
     public void clear(@NonNull String sessionId) {
         // opcional: podrías implementar deleteBySessionId
+        //repository.deleteBySessionId(sessionId);
     }
 }
