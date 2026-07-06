@@ -1,6 +1,5 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest;
 
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatByUserIdRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatRequest;
@@ -36,7 +35,7 @@ public interface ChatController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChatResponse.class)))),
             @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
     })
-    ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request);
+    ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody String userId);
 
     @Operation(summary = "Obtener mensajes de un chat", description = "Obtiene el historial completo de mensajes de una sesion de chat")
     @ApiResponses(value = {

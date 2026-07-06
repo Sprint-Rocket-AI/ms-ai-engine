@@ -1,7 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.impl;
 
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.ChatController;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatByUserIdRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatRequest;
@@ -36,8 +35,8 @@ public class ChatRestController implements ChatController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request) {
-        return ResponseEntity.ok(chatService.getChatsByUserId(request.userId()));
+    public ResponseEntity<List<ChatResponse>> getChatsByUserId(@PathVariable String userId) {
+        return ResponseEntity.ok(chatService.getChatsByUserId(userId));
     }
 
     @GetMapping("/{sessionId}")
