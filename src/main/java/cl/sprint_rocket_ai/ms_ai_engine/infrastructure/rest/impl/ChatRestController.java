@@ -17,8 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/chat")
-@CrossOrigin(origins = "*")
+@RequestMapping("api/chat")
 public class ChatRestController implements ChatController {
 
     private static final Logger log = LoggerFactory.getLogger(ChatRestController.class);
@@ -36,12 +35,12 @@ public class ChatRestController implements ChatController {
         return ResponseEntity.ok(chatService.createChat(request));
     }
 
-    @PostMapping("/list")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<ChatResponse>> getChatsByUserId(@Valid @RequestBody ChatByUserIdRequest request) {
         return ResponseEntity.ok(chatService.getChatsByUserId(request.userId()));
     }
 
-    @GetMapping("/{sessionId}/messages")
+    @GetMapping("/{sessionId}")
     public ResponseEntity<List<ChatMessageResponse>> getMessagesChatBySessionId(@PathVariable String sessionId){
         return ResponseEntity.ok(chatMessageService.getFullHistory(sessionId));
     }
