@@ -7,6 +7,6 @@ public record CreateChatResponse(
         String title,
         String query,
         String answer,
-        Instant createAt
+        Instant createdAt
 ) {
 }
