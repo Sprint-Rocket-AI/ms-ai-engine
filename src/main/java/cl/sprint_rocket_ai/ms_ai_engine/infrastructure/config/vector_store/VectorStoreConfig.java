@@ -37,7 +37,7 @@ public class VectorStoreConfig {
                 .collectionName(vectorCollectionName)
                 .vectorIndexName(vectorIndexName)
                 .pathName(vectorPathName)
-                .initializeSchema(true)
+                .initializeSchema(false)
                 .build();
     }
 
@@ -50,7 +50,7 @@ public class VectorStoreConfig {
                 .indexName(indexName)
                 .prefix(cachePrefix)
                 .metadataFields(RedisVectorStore.MetadataField.tag("answer"))
-                .initializeSchema(true)
+                .initializeSchema(false)
                 .build();
     }
 }

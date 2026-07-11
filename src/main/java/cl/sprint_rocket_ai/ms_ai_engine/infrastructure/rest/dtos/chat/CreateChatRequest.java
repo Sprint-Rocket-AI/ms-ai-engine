@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 public record CreateChatRequest(
         @NotBlank(message = "El userId no puede estar vacío")
         String userId,
-        @NotBlank(message = "El title no puede estar vacío")
-        String title
+        @NotBlank(message = "El contenido no puede estar vacío")
+        String content
 ) {
 }

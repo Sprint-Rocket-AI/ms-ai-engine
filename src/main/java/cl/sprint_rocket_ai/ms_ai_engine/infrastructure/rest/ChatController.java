@@ -3,6 +3,7 @@ package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -27,7 +28,7 @@ public interface ChatController {
                     content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Request invalida", content = @Content)
     })
-    ResponseEntity<String> create(@Valid @RequestBody CreateChatRequest request);
+    ResponseEntity<CreateChatResponse> create(@Valid @RequestBody CreateChatRequest request);
 
     @Operation(summary = "Listar chats por usuario", description = "Obtiene la lista de chats asociados a un usuario")
     @ApiResponses(value = {

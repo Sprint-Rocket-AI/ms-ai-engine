@@ -4,6 +4,7 @@ import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.ChatController;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatMessageResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatMessageService;
 import cl.sprint_rocket_ai.ms_ai_engine.service.ChatService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class ChatRestController implements ChatController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@Valid @RequestBody CreateChatRequest request) {
+    public ResponseEntity<CreateChatResponse> create(@Valid @RequestBody CreateChatRequest request) {
         return ResponseEntity.ok(chatService.createChat(request));
     }
 

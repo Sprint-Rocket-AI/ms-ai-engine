@@ -2,6 +2,8 @@ package cl.sprint_rocket_ai.ms_ai_engine.service;
 
 import cl.sprint_rocket_ai.ms_ai_engine.domain.documents.Chat;
 import cl.sprint_rocket_ai.ms_ai_engine.domain.repositories.ChatMongoRepository;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.AIRequest;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.ChatResponse;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.chat.CreateChatRequest;
 import org.slf4j.Logger;
@@ -17,23 +19,42 @@ public class ChatService {
 
     private static final Logger log = LoggerFactory.getLogger(ChatService.class);
     private final ChatMongoRepository chatMongoRepository;
+    private final RAGService ragService;
 
-    public ChatService(ChatMongoRepository chatMongoRepository) {
+    public ChatService(ChatMongoRepository chatMongoRepository,
+                       RAGService ragService
+    ) {
         this.chatMongoRepository = chatMongoRepository;
+        this.ragService = ragService;
     }
 
-    public String createChat(CreateChatRequest request) {
+    public CreateChatResponse createChat(CreateChatRequest request) {
         log.info("Creando nuevo chat para userId: {}", request.userId());
+        Chat chat = createChatEntity(request);
+        AIRequest aiRequest = new AIRequest(chat.getSessionId(), request.content());
+        String answer = ragService.ask(aiRequest);
+        log.info("Chat creado para userId: {} y sessionId: {}", request.userId(), chat.getSessionId());
+        return new CreateChatResponse(
+                chat.getSessionId(),
+                chat.getTitle(),
+                request.content(),
+                answer,
+                chat.getCreatedAt()
+        );
+    }
+
+    private Chat createChatEntity(CreateChatRequest request){
         Chat chat = new Chat();
         chat.setSessionId(UUID.randomUUID().toString());
         Instant now = Instant.now();
         chat.setCreatedAt(now);
         chat.setUserId(request.userId());
-        chat.setTitle(request.title());
+        String title = request.content().substring(0,15);
+        chat.setTitle(title);
         chatMongoRepository.save(chat);
-        log.info("Chat creado para userId: {} y sessionId: {}", request.userId(), chat.getSessionId());
-        return chat.getSessionId();
+        return chat;
     }
+
 
     public List<ChatResponse> getChatsByUserId(String userId) {
         log.info("Obteniendo chats para userId: {}", userId);
