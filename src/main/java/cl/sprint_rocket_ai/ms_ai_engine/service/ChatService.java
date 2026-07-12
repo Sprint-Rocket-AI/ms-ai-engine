@@ -49,7 +49,7 @@ public class ChatService {
         Instant now = Instant.now();
         chat.setCreatedAt(now);
         chat.setUserId(request.userId());
-        String title = request.content().substring(0,15);
+        String title = request.content().substring(0,20);
         chat.setTitle(title);
         chatMongoRepository.save(chat);
         return chat;

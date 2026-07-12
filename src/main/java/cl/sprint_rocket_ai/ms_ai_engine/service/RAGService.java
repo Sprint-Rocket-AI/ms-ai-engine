@@ -51,8 +51,13 @@ public class RAGService {
 
     private String generateAnswer(AIRequest request) {
         String context = getContext(vectorStoreService.search(request.userPrompt()));
+        boolean hasContext = !context.isEmpty();
         log.info("Contruyendo prompt...");
-        String prompt = promptBuilder.buildWithContext(request.userPrompt(), context);
+
+        String prompt = hasContext
+                ?promptBuilder.buildWithContext(request.userPrompt(), context)
+                :promptBuilder.build(request.userPrompt());
+
         String systemPrompt = loaderUtils.load(promptBuilder.getType().getPathSystemPrompt());
         log.info("Fin de la construcción");
         return chatSpringAI.generate(request.sessionId(), systemPrompt, prompt);
@@ -64,4 +69,5 @@ public class RAGService {
                 .map(Document::getText)
                 .collect(Collectors.joining("\n"));
     }
+
 }
