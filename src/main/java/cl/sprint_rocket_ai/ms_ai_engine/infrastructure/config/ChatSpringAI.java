@@ -18,45 +18,43 @@ import java.util.Map;
 
 @Component
 public class ChatSpringAI {
-    private static final Logger log = LoggerFactory.getLogger(ChatSpringAI.class);
-    private final ChatClient chatClient;
+    private final ChatClient chatClientWithMemory;
+    private final ChatClient chatClientStateless;
 
     public ChatSpringAI(ChatClient.Builder chatClientBuilder,
                         ChatMemory chatMemory,
-                        SyncMcpToolCallbackProvider provider
-    ) {
-        this.chatClient = chatClientBuilder
-                .defaultAdvisors(
-                        MessageChatMemoryAdvisor.builder(chatMemory).build()
-                )
-                .defaultTools((ToolCallback[]) provider.getToolCallbacks())
+                        SyncMcpToolCallbackProvider provider) {
+
+        ToolCallback[] tools = provider.getToolCallbacks();
+
+        this.chatClientWithMemory = chatClientBuilder.build()
+                .mutate()
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultTools(tools)
+                .build();
+
+        this.chatClientStateless = chatClientBuilder.build()
+                .mutate()
+                .defaultTools(tools)
                 .build();
     }
 
     public String generate(String sessionId, String systemPrompt, String userPrompt) {
-        log.info("Generando respuesta desde AI para la sessionId: {}", sessionId);
-        String response = chatClient.prompt()
+        return chatClientWithMemory.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
                 .call()
                 .content();
-
-        log.info("Respuesta generada para la sessionId: {}", sessionId);
-        return response;
     }
 
     public String generate(String systemPrompt, String userPrompt) {
-        log.info("Generando respuesta desde AI");
-        String response = chatClient.prompt()
+        return chatClientStateless.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, MongoChatMemory.NO_MEMORY_CONVERSATION_ID))
                 .call()
                 .content();
-        log.info("Respuesta generada");
-        return response;
     }
+
 
 }
