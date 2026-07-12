@@ -1,6 +1,7 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config;
 
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.chat_memory.MongoChatMemory;
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.context_filter.UserContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -12,6 +13,7 @@ import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Component
@@ -37,6 +39,7 @@ public class ChatSpringAI {
                 .system(systemPrompt)
                 .user(userPrompt)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
+                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
                 .call()
                 .content();
 
@@ -55,4 +58,5 @@ public class ChatSpringAI {
         log.info("Respuesta generada");
         return response;
     }
+
 }
