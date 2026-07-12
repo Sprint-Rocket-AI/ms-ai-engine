@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Component
@@ -14,14 +17,14 @@ public class ChatSpringAI {
     private final ChatClient chatClient;
 
     public ChatSpringAI(ChatClient.Builder chatClientBuilder,
-                        ChatMemory chatMemory
-    //                    List<ToolCallbackProvider> providers
+                        ChatMemory chatMemory,
+                        List<ToolCallbackProvider> providers
     ) {
         this.chatClient = chatClientBuilder
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(chatMemory).build()
                 )
-        //        .defaultTools(providers)
+                .defaultTools(providers)
                 .build();
     }
 
