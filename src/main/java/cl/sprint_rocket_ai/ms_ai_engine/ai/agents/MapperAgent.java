@@ -49,6 +49,7 @@ public class MapperAgent {
 
     private Map<String, Object> toMapClass(String jsonString){
         try {
+            log.info("Mappeando respuesta: {} a Json",jsonString);
             return mapper.readValue(jsonString, Map.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
