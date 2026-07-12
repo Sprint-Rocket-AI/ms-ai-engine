@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/prompt")
-@CrossOrigin(origins = "*")
+@RequestMapping("api/prompt")
 public class PromptRestController implements PromptController {
     private final MapperAgent mapperAgent;
 
