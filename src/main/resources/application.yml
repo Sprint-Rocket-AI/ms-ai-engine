@@ -36,8 +36,9 @@ spring:
     mcp:
       client:
         enabled: true
-        initialized: false
-        sse:
+        initialized: true
+        request-timeout: 120s
+        streamable-http:
           connections:
             ms-checkpoint:
               url: ${URL_MCP_SSE_CHECKPOINT}
