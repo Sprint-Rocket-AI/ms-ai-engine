@@ -43,7 +43,7 @@ public class ChatSpringAI {
                 .system(systemPrompt)
                 .user(userPrompt)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
-                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
+                .toolContext(buildToolContext())
                 .call()
                 .content();
     }
@@ -53,9 +53,16 @@ public class ChatSpringAI {
         return chatClientStateless.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
-                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
+                .toolContext(buildToolContext())
                 .call()
                 .content();
+    }
+
+    private Map<String, Object> buildToolContext() {
+        String userId = UserContextHolder.getUserId();
+        return (userId != null)
+                ? Map.of("userId", userId)
+                : Map.of();
     }
 
 
