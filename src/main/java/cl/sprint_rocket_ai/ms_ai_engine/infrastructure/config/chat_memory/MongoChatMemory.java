@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 public class MongoChatMemory implements ChatMemory {
 
     private final ChatMessageMongoRepository repository;
+    public static final String NO_MEMORY_CONVERSATION_ID = "__no_memory__";
 
     public MongoChatMemory(ChatMessageMongoRepository repository) {
         this.repository = repository;
@@ -22,7 +23,9 @@ public class MongoChatMemory implements ChatMemory {
 
     @Override
     public void add(@NonNull String sessionId, List<Message> messages) {
-
+        if (NO_MEMORY_CONVERSATION_ID.equals(sessionId)) {
+            return;
+        }
         List<ChatMessage> entities = messages.stream()
                 .map(msg -> {
                     String cleanedContent = cleanContentToPersist(msg.getText());
@@ -39,9 +42,11 @@ public class MongoChatMemory implements ChatMemory {
     }
 
     @Override
-    public List<Message> get(@NonNull String sesionId) {
-
-        List<ChatMessage> entities = repository.findTop10BySessionIdOrderByTimestampDesc(sesionId);
+    public List<Message> get(@NonNull String sessionId) {
+        if (NO_MEMORY_CONVERSATION_ID.equals(sessionId)) {
+            return List.of();
+        }
+        List<ChatMessage> entities = repository.findTop10BySessionIdOrderByTimestampDesc(sessionId);
 
         Collections.reverse(entities);
 

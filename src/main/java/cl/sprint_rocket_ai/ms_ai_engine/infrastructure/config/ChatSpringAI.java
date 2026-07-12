@@ -1,5 +1,6 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config;
 
+import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.chat_memory.MongoChatMemory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -48,6 +49,7 @@ public class ChatSpringAI {
         String response = chatClient.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, MongoChatMemory.NO_MEMORY_CONVERSATION_ID))
                 .call()
                 .content();
         log.info("Respuesta generada");
