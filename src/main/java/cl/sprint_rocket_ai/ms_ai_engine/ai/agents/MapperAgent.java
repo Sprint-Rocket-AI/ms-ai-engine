@@ -35,6 +35,7 @@ public class MapperAgent {
 
     public Map<String, Object> map (PromptMapperRequest request){
         log.info("Iniciando Prompt Mapper");
+        log.info("Esquema a mapear: {}",request.template());
         String userPrompt = request.content();
         log.info("Iniciando prompt: {}",userPrompt);
         String prompt = promptBuilder.build(userPrompt,request.template());
