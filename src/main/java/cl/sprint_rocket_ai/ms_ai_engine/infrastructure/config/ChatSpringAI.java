@@ -1,6 +1,5 @@
 package cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config;
 
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.chat_memory.MongoChatMemory;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.config.context_filter.UserContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,15 +8,14 @@ import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 
 
 @Component
 public class ChatSpringAI {
+    private static final Logger log = LoggerFactory.getLogger(ChatSpringAI.class);
     private final ChatClient chatClientWithMemory;
     private final ChatClient chatClientStateless;
 
@@ -40,18 +38,22 @@ public class ChatSpringAI {
     }
 
     public String generate(String sessionId, String systemPrompt, String userPrompt) {
+        log.info("Generando respuesta con memoria para sessionId: {}", sessionId);
         return chatClientWithMemory.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, sessionId))
+                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
                 .call()
                 .content();
     }
 
     public String generate(String systemPrompt, String userPrompt) {
+        log.info("Generando respuesta sin memoria");
         return chatClientStateless.prompt()
                 .system(systemPrompt)
                 .user(userPrompt)
+                .toolContext(Map.of("userId", UserContextHolder.getUserId()))
                 .call()
                 .content();
     }

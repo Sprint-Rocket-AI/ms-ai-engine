@@ -20,11 +20,6 @@ public class UserContextFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String userId = request.getHeader(USER_ID_HEADER);
 
-        if (userId == null || userId.isBlank()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Falta el header " + USER_ID_HEADER);
-            return;
-        }
-
         try {
             UserContextHolder.setUserId(userId);
             filterChain.doFilter(request, response);
