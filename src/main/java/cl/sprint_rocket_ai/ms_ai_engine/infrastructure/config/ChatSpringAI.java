@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +20,13 @@ public class ChatSpringAI {
 
     public ChatSpringAI(ChatClient.Builder chatClientBuilder,
                         ChatMemory chatMemory,
-                        List<ToolCallbackProvider> providers
+                        SyncMcpToolCallbackProvider provider
     ) {
         this.chatClient = chatClientBuilder
                 .defaultAdvisors(
                         MessageChatMemoryAdvisor.builder(chatMemory).build()
                 )
-                .defaultTools(providers)
+                .defaultTools((ToolCallback[]) provider.getToolCallbacks())
                 .build();
     }
 
