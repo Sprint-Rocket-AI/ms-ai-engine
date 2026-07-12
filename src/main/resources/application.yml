@@ -42,6 +42,7 @@ spring:
           connections:
             ms-checkpoint:
               url: ${URL_MCP_SSE_CHECKPOINT}
+              endpoint: /checkpoint/mcp
 
   data:
     mongodb:
