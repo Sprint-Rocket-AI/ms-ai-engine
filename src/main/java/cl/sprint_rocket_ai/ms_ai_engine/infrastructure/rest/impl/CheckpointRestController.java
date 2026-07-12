@@ -4,8 +4,6 @@ import cl.sprint_rocket_ai.ms_ai_engine.ai.agents.DailySummaryAgent;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.CheckpointController;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioRequest;
 import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.ResumenDiarioResponse;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.SugerirActividadesRequest;
-import cl.sprint_rocket_ai.ms_ai_engine.infrastructure.rest.dtos.actividad.SugerirActividadesResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
