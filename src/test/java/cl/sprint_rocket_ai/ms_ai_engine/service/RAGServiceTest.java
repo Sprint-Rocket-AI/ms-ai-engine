@@ -132,4 +132,35 @@ class RAGServiceTest {
         verify(semanticCache).saveToCache(QUESTION, ANSWER);
         verifyNoMoreInteractions(vectorStoreService, promptBuilder, loaderUtils, chatSpringAI, semanticCache);
     }
+
+    @Test
+    @DisplayName("Debe limitar el contexto a 5 documentos aunque el Vector Store devuelva más")
+    void shouldWhenHayMasDe5DocumentosElContextoUsaSolo5() {
+        // Given
+        AIRequest request = new AIRequest(SESSION_ID, QUESTION);
+        List<Document> sixDocs = List.of(
+                Document.builder().text("doc1").build(),
+                Document.builder().text("doc2").build(),
+                Document.builder().text("doc3").build(),
+                Document.builder().text("doc4").build(),
+                Document.builder().text("doc5").build(),
+                Document.builder().text("doc6-no-debe-incluirse").build()
+        );
+        String expectedContext = "doc1\ndoc2\ndoc3\ndoc4\ndoc5";
+
+        when(semanticCache.findInCache(QUESTION)).thenReturn(java.util.Optional.empty());
+        when(vectorStoreService.search(QUESTION)).thenReturn(sixDocs);
+        when(promptBuilder.buildWithContext(QUESTION, expectedContext)).thenReturn(PROMPT_WITH_CONTEXT);
+        when(promptBuilder.getType()).thenReturn(PromptTypeEnum.RAG);
+        when(loaderUtils.load(PATH_SYSTEM_PROMPT)).thenReturn(SYSTEM_PROMPT);
+        when(chatSpringAI.generate(SESSION_ID, SYSTEM_PROMPT, PROMPT_WITH_CONTEXT)).thenReturn(ANSWER);
+
+        // When
+        String response = ragService.ask(request);
+
+        // Then
+        assertEquals(ANSWER, response);
+        verify(promptBuilder).buildWithContext(QUESTION, expectedContext);
+        verify(semanticCache).saveToCache(QUESTION, ANSWER);
+    }
 }

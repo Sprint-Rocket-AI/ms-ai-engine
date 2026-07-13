@@ -133,4 +133,38 @@ class ChatServiceTest {
         verifyNoMoreInteractions(chatMongoRepository, ragService);
         assertEquals(1L, deletedCount);
     }
+
+    @Test
+    @DisplayName("Debe truncar el título a exactamente 20 caracteres cuando el contenido supera ese límite")
+    void shouldWhenContenidoExcedeLimiteTituloTieneExactamente20Chars() {
+        // Given
+        String contenidoLargo = "Este contenido tiene más de veinte caracteres sin duda";
+        CreateChatRequest request = new CreateChatRequest(USER_ID, contenidoLargo);
+
+        when(chatMongoRepository.save(org.mockito.ArgumentMatchers.any(Chat.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(ragService.ask(org.mockito.ArgumentMatchers.any(AIRequest.class))).thenReturn(ANSWER);
+
+        // When
+        CreateChatResponse response = chatService.createChat(request);
+
+        // Then
+        assertEquals(20, response.title().length());
+        assertEquals("Este contenido tiene", response.title());
+    }
+
+    @Test
+    @DisplayName("Debe devolver lista vacía cuando el usuario no tiene chats registrados")
+    void shouldWhenUsuarioSinChatsRetornaListaVacia() {
+        // Given
+        when(chatMongoRepository.findByUserIdOrderByCreatedAtDesc(USER_ID)).thenReturn(List.of());
+
+        // When
+        List<ChatResponse> response = chatService.getChatsByUserId(USER_ID);
+
+        // Then
+        verify(chatMongoRepository).findByUserIdOrderByCreatedAtDesc(USER_ID);
+        verifyNoMoreInteractions(chatMongoRepository, ragService);
+        assertEquals(0, response.size());
+    }
 }
