@@ -13,7 +13,7 @@ When: ejecución del método a probar
 Then: validaciones/assertions
 Los nombres de los métodos deben seguir la convención:
 shouldWhen
-Debes de crear constantes en metodos o clases para no duplicar valores literales en las pruebas, En metodó dejar la variable en el apartado Given y si es en clases en el setUp.
+Debes de crear constantes en métodos o clases para no duplicar valores literales, En método la variable debe estar en el apartado Given, En clases en el setUp.
 Cada prueba debe incluir:
 @DisplayName con una descripción clara en español.
 Cubrir casos relevantes del mundo real:

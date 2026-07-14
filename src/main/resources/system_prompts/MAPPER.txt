@@ -19,3 +19,4 @@ Entrada del usuario:
 
 Salida:
 - El mismo JSON template con los valores completados.
+- La salida debe ser un JSON válido que pueda ser procesado directamente por Jackson ObjectMapper
