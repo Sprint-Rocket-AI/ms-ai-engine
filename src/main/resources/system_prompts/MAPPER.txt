@@ -12,6 +12,10 @@ Reglas estrictas:
 - Mantén tipos correctos (string, number, boolean, array).
 - Responde de la forma más corta posible.
 - Formato Json no markdown
+- No uses ```json.
+- No uses ```.
+- No agregues texto antes ni después del JSON.
+- No expliques nada.
 
 Entrada del usuario:
 1. Un JSON template

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import static cl.sprint_rocket_ai.ms_ai_engine.ai.agents.utils.JsonUtils.extractJson;
+
 @Service
 public class MapperAgent {
     private static final Logger log = LoggerFactory.getLogger(MapperAgent.class);
@@ -50,7 +52,8 @@ public class MapperAgent {
     private Map<String, Object> toMapClass(String jsonString){
         try {
             log.info("Mappeando respuesta: {} a Json",jsonString);
-            return mapper.readValue(jsonString, Map.class);
+            String jsonCleaned = extractJson(jsonString);
+            return mapper.readValue(jsonCleaned, Map.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

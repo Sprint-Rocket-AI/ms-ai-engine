@@ -22,3 +22,7 @@ Reglas estrictas:
 - El campo "razon" debe justificar brevemente la sugerencia en base a las actividades del día.
 - Usa un tono profesional y conciso.
 - Formato JSON plano, sin markdown.
+- No uses ```json.
+- No uses ```.
+- No agregues texto antes ni después del JSON.
+- No expliques nada.

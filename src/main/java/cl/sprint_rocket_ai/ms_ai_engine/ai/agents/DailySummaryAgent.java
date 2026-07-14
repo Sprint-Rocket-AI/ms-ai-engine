@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import static cl.sprint_rocket_ai.ms_ai_engine.ai.agents.utils.JsonUtils.extractJson;
+
 @Service
 public class DailySummaryAgent {
 
@@ -49,7 +51,8 @@ public class DailySummaryAgent {
 
     private ResumenDiarioResponse toResponseClass(String jsonString) {
         try {
-            return mapper.readValue(jsonString, ResumenDiarioResponse.class);
+            String jsonCleaned = extractJson(jsonString);
+            return mapper.readValue(jsonCleaned, ResumenDiarioResponse.class);
         } catch (Exception e) {
             throw new RuntimeException("Error al procesar respuesta de resumen diario", e);
         }
