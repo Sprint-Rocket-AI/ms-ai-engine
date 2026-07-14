@@ -11,7 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +23,14 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -33,7 +43,6 @@ class VectorStoreServiceTest {
     private static final String CONTENT = "texto corto";
     private static final String QUERY = "buscar documento";
     private static final String TAG = "tag-1";
-    private static final String VALUE = "valor-1";
 
     @Mock
     private VectorStore store;
@@ -87,5 +96,106 @@ class VectorStoreServiceTest {
         assertEquals(QUERY, requestCaptor.getValue().getQuery());
         assertEquals(3, requestCaptor.getValue().getTopK());
         assertFalse(requestCaptor.getValue().hasFilterExpression());
+    }
+
+    @Test
+    @DisplayName("Debe eliminar los embeddings existentes y volver a indexar el documento actualizado")
+    void shouldWhenActualizaDocumentoEliminaYReindexaConNuevoContenido() {
+        // Given
+        Map<String, Object> metadata = new HashMap<>();
+        AIIndexRequest request = new AIIndexRequest(ID, TYPE, CONTENT, List.of(TAG), metadata);
+
+        // When
+        vectorStoreService.update(ID, request);
+
+        // Then
+        var inOrder = inOrder(store);
+        inOrder.verify(store).delete(ID);
+        inOrder.verify(store).add(anyList());
+        verifyNoMoreInteractions(store);
+    }
+
+    @Test
+    @DisplayName("Debe eliminar los embeddings por documentId sin lanzar excepción")
+    void shouldWhenEliminaEmbeddingsPorDocumentIdLlamaStoreDelete() {
+        // Given / When
+        vectorStoreService.deleteByDocumentId(ID);
+
+        // Then
+        verify(store).delete(ID);
+        verifyNoMoreInteractions(store);
+    }
+
+    @Test
+    @DisplayName("Debe lanzar RuntimeException cuando el store falla al eliminar embeddings")
+    void shouldWhenStoreDeleteFallaLanzaRuntimeException() {
+        // Given
+        doThrow(new RuntimeException("error store")).when(store).delete(ID);
+
+        // When / Then
+        assertThrows(RuntimeException.class, () -> vectorStoreService.deleteByDocumentId(ID));
+        verify(store).delete(ID);
+        verifyNoMoreInteractions(store);
+    }
+
+    @Test
+    @DisplayName("Debe indexar un PDF correctamente usando el nombre original del archivo")
+    void shouldWhenGuardaPdfConNombreOriginalIndexaEnVectorStore() throws IOException {
+        // Given — PDF mínimo válido (1 página vacía)
+        byte[] minimalPdf = buildMinimalPdf();
+        MultipartFile file = new MockMultipartFile("file", "documento.pdf", "application/pdf", minimalPdf);
+
+        // When
+        vectorStoreService.savePdf(file);
+
+        // Then
+        verify(store).add(anyList());
+        verifyNoMoreInteractions(store);
+    }
+
+    @Test
+    @DisplayName("Debe usar 'file.pdf' como nombre cuando el archivo no tiene nombre original")
+    void shouldWhenGuardaPdfSinNombreUsaNombrePorDefecto() throws IOException {
+        // Given — MultipartFile sin originalFilename
+        byte[] minimalPdf = buildMinimalPdf();
+        MultipartFile file = new MockMultipartFile("file", "", "application/pdf", minimalPdf);
+
+        // When
+        vectorStoreService.savePdf(file);
+
+        // Then
+        ArgumentCaptor<List<Document>> captor = ArgumentCaptor.forClass(List.class);
+        verify(store).add(captor.capture());
+        captor.getValue().forEach(doc ->
+                assertEquals("file.pdf", doc.getMetadata().get("source"))
+        );
+    }
+
+    @Test
+    @DisplayName("Debe lanzar RuntimeException cuando el MultipartFile lanza IOException al leer el stream")
+    void shouldWhenMultipartFileIOExceptionLanzaRuntimeException() throws IOException {
+        // Given
+        MultipartFile file = mock(MultipartFile.class);
+        when(file.getInputStream()).thenThrow(new IOException("stream error"));
+
+        // When / Then
+        assertThrows(RuntimeException.class, () -> vectorStoreService.savePdf(file));
+    }
+
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    /**
+     * Construye un PDF mínimo válido en memoria (header + 1 página vacía + xref).
+     * Suficiente para que PagePdfDocumentReader no falle al parsear.
+     */
+    private byte[] buildMinimalPdf() {
+        String pdf =
+                "%PDF-1.4\n" +
+                "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n" +
+                "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n" +
+                "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>\nendobj\n" +
+                "xref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \n" +
+                "trailer\n<< /Size 4 /Root 1 0 R >>\nstartxref\n190\n%%EOF";
+        return pdf.getBytes();
     }
 }

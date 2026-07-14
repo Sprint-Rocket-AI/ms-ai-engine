@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.7</version>
+        <version>4.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cl.sprint_rocket_ai</groupId>
@@ -29,7 +29,15 @@
 
     <properties>
         <java.version>25</java.version>
-        <spring-ai.version>2.0.0</spring-ai.version>
+        <spring-ai.version>2.0.0-RC2</spring-ai.version>
+        <sonar.coverage.exclusions>
+            **/MsAiEngineApplication.java,
+            **/domain/**,
+            **/infrastructure/**,
+            **/ai/**,
+            **/prompt/**,
+            **/agents/**
+        </sonar.coverage.exclusions>
     </properties>
 
     <repositories>
@@ -131,6 +139,35 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.14</version> <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+
+                    <excludes>
+                        <exclude>**/*MsAiEngineApplication.class</exclude>
+                        <exclude>**/domain/**</exclude>
+                        <exclude>**/infrastructure/**</exclude>
+                        <exclude>**/ai/**</exclude>
+                        <exclude>**/prompt/**</exclude>
+                        <exclude>**/agents/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
